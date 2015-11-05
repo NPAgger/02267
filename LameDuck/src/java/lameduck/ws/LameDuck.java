@@ -5,6 +5,7 @@
  */
 package lameduck.ws;
 
+import dk.dtu.imm.fastmoney.types.*;
 import java.util.Arrays;
 import flightservice.*;
 import java.util.List;
@@ -12,6 +13,7 @@ import javax.jws.WebService;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
+import javax.xml.ws.WebServiceRef;
 
 /**
  *
@@ -19,7 +21,13 @@ import javax.xml.datatype.XMLGregorianCalendar;
  */
 @WebService(serviceName = "lameduckService", portName = "lameduckPortTypeBindingPort", endpointInterface = "flightservice.LameduckPortType", targetNamespace = "flightservice", wsdlLocation = "WEB-INF/wsdl/LameDuck/lameduck.wsdl")
 public class LameDuck {
+    @WebServiceRef(wsdlLocation = "WEB-INF/wsdl/fastmoney.imm.dtu.dk_8080/BankService.wsdl")
+    private BankService service_1;
+    @WebServiceRef(wsdlLocation = "WEB-INF/wsdl/fastmoney.imm.dtu.dk_8080/BankService.wsdl")
+    private BankService service;
     
+    
+    private static AccountType account;
     private static DatatypeFactory df;
     static{
         DatatypeFactory d = null;
@@ -29,6 +37,9 @@ public class LameDuck {
         catch(DatatypeConfigurationException e){
         }
         df = d;
+        account = new AccountType();
+        account.setName("LameDuck");
+        account.setNumber("50208812");
     }
     
     FlightInfo flight0 = dataInit(1,500,"Dohop","Iceland","China",df.newXMLGregorianCalendar("2015-11-10T00:00:00"),df.newXMLGregorianCalendar("2015-11-20T00:00:00"), "Boeing 747");
@@ -49,7 +60,7 @@ public class LameDuck {
     public List<FlightInfo> staticFlightData = Arrays.asList(flight0,flight1,flight2,flight3,flight4,flight5,flight6,flight7,flight8,flight9,flight10);
     
     
-    public FlightInfo dataInit(int bookNmr, float price, String airlineRes, String ori, String des, XMLGregorianCalendar dep, XMLGregorianCalendar arr, String carr){
+    public FlightInfo dataInit(int bookNmr, int price, String airlineRes, String ori, String des, XMLGregorianCalendar dep, XMLGregorianCalendar arr, String carr){
         FlightInfo info = new FlightInfo();
         info.setAirlineReservationService(airlineRes);
         info.setBookingNumber(bookNmr);
@@ -92,13 +103,64 @@ public class LameDuck {
     }
 
     public boolean bookFlight(flightservice.RequestbookFlight input) throws flightservice.BookFlightFault_Exception {
-        //TODO implement this method
-        throw new UnsupportedOperationException("Not implemented yet.");
+        boolean status = false;
+        int price = 0;
+        for (FlightInfo staticFlightData1 : staticFlightData) {
+            if (staticFlightData1.getBookingNumber() == input.getBookingNumber()) {
+                status = true;
+                price = staticFlightData1.getPrice();
+            }
+        }
+        if (status){
+            try{
+                boolean ccValid = validateCreditCard(13,input.getCreditCardInfo(),price);
+                
+                chargeCreditCard(13, input.getCreditCardInfo(), price, account);
+            }
+            catch (CreditCardFaultMessage fault){
+                String message = fault.getMessage();
+                flightservice.BookFlightFault bff = new flightservice.BookFlightFault();
+                bff.setMessage(fault.getFaultInfo().getMessage());
+                flightservice.BookFlightFault_Exception ex = new flightservice.BookFlightFault_Exception(message, bff);
+                throw ex;
+            }
+            
+        }
+        else {
+            String message = "Flight not found";
+            flightservice.BookFlightFault bff = new flightservice.BookFlightFault();
+            bff.setMessage(message);
+            flightservice.BookFlightFault_Exception ex = new flightservice.BookFlightFault_Exception(message, bff);
+            throw ex;
+        }
+        return status;
     }
 
     public boolean cancelFlight(flightservice.RequestcancelFlight input) throws flightservice.CancelFlightFault_Exception {
         //TODO implement this method
         throw new UnsupportedOperationException("Not implemented yet.");
     }
+
+    private boolean chargeCreditCard(int group, dk.dtu.imm.fastmoney.types.CreditCardInfoType creditCardInfo, int amount, dk.dtu.imm.fastmoney.types.AccountType account) throws CreditCardFaultMessage {
+        // Note that the injected javax.xml.ws.Service reference as well as port objects are not thread safe.
+        // If the calling of port operations may lead to race condition some synchronization is required.
+        dk.dtu.imm.fastmoney.types.BankPortType port = service_1.getBankPort();
+        return port.chargeCreditCard(group, creditCardInfo, amount, account);
+    }
+
+    private boolean refundCreditCard(int group, dk.dtu.imm.fastmoney.types.CreditCardInfoType creditCardInfo, int amount, dk.dtu.imm.fastmoney.types.AccountType account) throws CreditCardFaultMessage {
+        // Note that the injected javax.xml.ws.Service reference as well as port objects are not thread safe.
+        // If the calling of port operations may lead to race condition some synchronization is required.
+        dk.dtu.imm.fastmoney.types.BankPortType port = service_1.getBankPort();
+        return port.refundCreditCard(group, creditCardInfo, amount, account);
+    }
+
+    private boolean validateCreditCard(int group, dk.dtu.imm.fastmoney.types.CreditCardInfoType creditCardInfo, int amount) throws CreditCardFaultMessage {
+        // Note that the injected javax.xml.ws.Service reference as well as port objects are not thread safe.
+        // If the calling of port operations may lead to race condition some synchronization is required.
+        dk.dtu.imm.fastmoney.types.BankPortType port = service_1.getBankPort();
+        return port.validateCreditCard(group, creditCardInfo, amount);
+    }
+
     
 }
