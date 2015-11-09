@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" prefer="system">
-    <system systemId="file:/Users/Andri/TravelGood/02267/LameDuck/src/java/lameduck.wsdl" uri="src/conf/xml-resources/web-services/LameDuck/wsdl/lameduck.wsdl"/>
     <system systemId="file:/Users/Andri/TravelGood/02267/LameDuck/src/java/BankServiceTypes.xsd" uri="src/conf/xml-resources/web-services/LameDuck/wsdl/BankServiceTypes.xsd"/>
     <nextCatalog catalog="nbproject/private/retriever/catalog.xml"/>
     <system systemId="http://fastmoney.imm.dtu.dk:8080/BankService?wsdl" uri="src/conf/xml-resources/web-service-references/BankService/wsdl/fastmoney.imm.dtu.dk_8080/BankService.wsdl"/>
@@ -8,5 +7,6 @@
     <system systemId="http://fastmoney.imm.dtu.dk:8080/BankService?xsd=1" uri="src/conf/xml-resources/web-service-references/BankService/wsdl/fastmoney.imm.dtu.dk_8080/BankService.xsd_1.xsd"/>
     <system systemId="http://fastmoney.imm.dtu.dk:8080/BankService?xsd=2" uri="src/conf/xml-resources/web-service-references/BankService/wsdl/fastmoney.imm.dtu.dk_8080/BankService.xsd_2.xsd"/>
     <system systemId="file:/C:/DTU/02267WebServices/Exam/02267/LameDuck/src/java/lameduck.wsdl" uri="src/conf/xml-resources/web-services/LameDuck/wsdl/lameduck.wsdl"/>
+    <system systemId="file:/Users/Andri/TravelGood/02267/LameDuck/src/java/lameduck.wsdl" uri="src/conf/xml-resources/web-services/LameDuck/wsdl/lameduck.wsdl"/>
     <system systemId="http://fastmoney.imm.dtu.dk:8080/BankServiceTypes.xsd" uri="src/conf/xml-resources/web-services/LameDuck/wsdl/fastmoney.imm.dtu.dk_8080/BankServiceTypes.xsd"/>
 </catalog>

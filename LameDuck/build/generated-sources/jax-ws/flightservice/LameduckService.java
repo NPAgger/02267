@@ -17,7 +17,7 @@ import javax.xml.ws.WebServiceFeature;
  * Generated source version: 2.2
  * 
  */
-@WebServiceClient(name = "lameduckService", targetNamespace = "flightservice", wsdlLocation = "file:/C:/DTU/02267WebServices/Exam/02267/LameDuck/src/conf/xml-resources/web-services/LameDuck/wsdl/lameduck.wsdl")
+@WebServiceClient(name = "lameduckService", targetNamespace = "flightservice", wsdlLocation = "file:/Users/Andri/TravelGood/02267/LameDuck/src/conf/xml-resources/web-services/LameDuck/wsdl/lameduck.wsdl")
 public class LameduckService
     extends Service
 {
@@ -30,7 +30,7 @@ public class LameduckService
         URL url = null;
         WebServiceException e = null;
         try {
-            url = new URL("file:/C:/DTU/02267WebServices/Exam/02267/LameDuck/src/conf/xml-resources/web-services/LameDuck/wsdl/lameduck.wsdl");
+            url = new URL("file:/Users/Andri/TravelGood/02267/LameDuck/src/conf/xml-resources/web-services/LameDuck/wsdl/lameduck.wsdl");
         } catch (MalformedURLException ex) {
             e = new WebServiceException(ex);
         }

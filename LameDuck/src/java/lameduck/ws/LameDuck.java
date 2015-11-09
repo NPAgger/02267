@@ -137,8 +137,20 @@ public class LameDuck {
     }
 
     public boolean cancelFlight(flightservice.RequestcancelFlight input) throws flightservice.CancelFlightFault_Exception {
-        //TODO implement this method
-        throw new UnsupportedOperationException("Not implemented yet.");
+        boolean status;
+        int halfPrice = (int) (input.getPrice()*0.5);
+        try{
+            refundCreditCard(13, input.getCreditCardInfo(), halfPrice, account);
+            status = true;
+        }
+        catch(CreditCardFaultMessage fault){
+            String message = fault.getMessage();
+            flightservice.CancelFlightFault cff = new flightservice.CancelFlightFault();
+            cff.setMessage(fault.getFaultInfo().getMessage());
+            flightservice.CancelFlightFault_Exception ex = new flightservice.CancelFlightFault_Exception(message, cff);
+            throw ex;
+        }
+        return status;
     }
 
     private boolean chargeCreditCard(int group, dk.dtu.imm.fastmoney.types.CreditCardInfoType creditCardInfo, int amount, dk.dtu.imm.fastmoney.types.AccountType account) throws CreditCardFaultMessage {
