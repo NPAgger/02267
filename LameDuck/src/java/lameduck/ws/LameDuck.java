@@ -43,17 +43,17 @@ public class LameDuck {
     }
     
     FlightInfo flight0 = dataInit(1,500,"Dohop","Iceland","China",df.newXMLGregorianCalendar("2015-11-10T00:00:00"),df.newXMLGregorianCalendar("2015-11-20T00:00:00"), "Boeing 747");
-    FlightInfo flight1 = dataInit(1,500,"Dohop","Iceland","China",df.newXMLGregorianCalendar("2015-11-10T00:00:00"),df.newXMLGregorianCalendar("2015-11-20T00:00:00"), "Boeing 747");
-    FlightInfo flight2 = dataInit(1,500,"Dohop","Iceland","China",df.newXMLGregorianCalendar("2015-11-10T00:00:00"),df.newXMLGregorianCalendar("2015-11-20T00:00:00"), "Boeing 747");
-    FlightInfo flight3 = dataInit(1,500,"Dohop","Iceland","China",df.newXMLGregorianCalendar("2015-11-10T00:00:00"),df.newXMLGregorianCalendar("2015-11-20T00:00:00"), "Boeing 747");
-    FlightInfo flight4 = dataInit(1,500,"Dohop","Iceland","China",df.newXMLGregorianCalendar("2015-11-10T00:00:00"),df.newXMLGregorianCalendar("2015-11-20T00:00:00"), "Boeing 747");
-    FlightInfo flight5 = dataInit(1,500,"Dohop","Iceland","China",df.newXMLGregorianCalendar("2015-11-10T00:00:00"),df.newXMLGregorianCalendar("2015-11-20T00:00:00"), "Boeing 747");
-    FlightInfo flight6 = dataInit(1,500,"Dohop","Iceland","China",df.newXMLGregorianCalendar("2015-11-10T00:00:00"),df.newXMLGregorianCalendar("2015-11-20T00:00:00"), "Boeing 747");
-    FlightInfo flight7 = dataInit(1,500,"Dohop","Iceland","China",df.newXMLGregorianCalendar("2015-11-10T00:00:00"),df.newXMLGregorianCalendar("2015-11-20T00:00:00"), "Boeing 747");
-    FlightInfo flight8 = dataInit(1,500,"Dohop","Iceland","China",df.newXMLGregorianCalendar("2015-11-10T00:00:00"),df.newXMLGregorianCalendar("2015-11-20T00:00:00"), "Boeing 747");
-    FlightInfo flight9 = dataInit(1,500,"Dohop","Iceland","China",df.newXMLGregorianCalendar("2015-11-10T00:00:00"),df.newXMLGregorianCalendar("2015-11-20T00:00:00"), "Boeing 747");
-    FlightInfo flight10 = dataInit(1,500,"Dohop","Iceland","China",df.newXMLGregorianCalendar("2015-11-10T00:00:00"),df.newXMLGregorianCalendar("2015-11-20T00:00:00"), "Boeing 747");
-    FlightInfo flight11 = dataInit(1,500,"Dohop","Iceland","China",df.newXMLGregorianCalendar("2015-11-10T00:00:00"),df.newXMLGregorianCalendar("2015-11-20T00:00:00"), "Boeing 747");
+    FlightInfo flight1 = dataInit(2,500,"Dohop","Iceland","China",df.newXMLGregorianCalendar("2015-11-10T00:00:00"),df.newXMLGregorianCalendar("2015-11-20T00:00:00"), "Boeing 747");
+    FlightInfo flight2 = dataInit(3,500,"Dohop","Iceland","China",df.newXMLGregorianCalendar("2015-11-10T00:00:00"),df.newXMLGregorianCalendar("2015-11-20T00:00:00"), "Boeing 747");
+    FlightInfo flight3 = dataInit(4,500,"Dohop","Iceland","China",df.newXMLGregorianCalendar("2015-11-10T00:00:00"),df.newXMLGregorianCalendar("2015-11-20T00:00:00"), "Boeing 747");
+    FlightInfo flight4 = dataInit(5,500,"Dohop","Iceland","China",df.newXMLGregorianCalendar("2015-11-10T00:00:00"),df.newXMLGregorianCalendar("2015-11-20T00:00:00"), "Boeing 747");
+    FlightInfo flight5 = dataInit(6,500,"Dohop","Iceland","China",df.newXMLGregorianCalendar("2015-11-10T00:00:00"),df.newXMLGregorianCalendar("2015-11-20T00:00:00"), "Boeing 747");
+    FlightInfo flight6 = dataInit(7,500,"Dohop","Iceland","China",df.newXMLGregorianCalendar("2015-11-10T00:00:00"),df.newXMLGregorianCalendar("2015-11-20T00:00:00"), "Boeing 747");
+    FlightInfo flight7 = dataInit(8,500,"Dohop","Iceland","China",df.newXMLGregorianCalendar("2015-11-10T00:00:00"),df.newXMLGregorianCalendar("2015-11-20T00:00:00"), "Boeing 747");
+    FlightInfo flight8 = dataInit(9,500,"Dohop","Iceland","China",df.newXMLGregorianCalendar("2015-11-10T00:00:00"),df.newXMLGregorianCalendar("2015-11-20T00:00:00"), "Boeing 747");
+    FlightInfo flight9 = dataInit(10,500,"Dohop","Iceland","China",df.newXMLGregorianCalendar("2015-11-10T00:00:00"),df.newXMLGregorianCalendar("2015-11-20T00:00:00"), "Boeing 747");
+    FlightInfo flight10 = dataInit(11,500,"Dohop","Iceland","China",df.newXMLGregorianCalendar("2015-11-10T00:00:00"),df.newXMLGregorianCalendar("2015-11-20T00:00:00"), "Boeing 747");
+    FlightInfo flight11 = dataInit(12,500,"Dohop","Iceland","China",df.newXMLGregorianCalendar("2015-11-10T00:00:00"),df.newXMLGregorianCalendar("2015-11-20T00:00:00"), "Boeing 747");
     
     
     

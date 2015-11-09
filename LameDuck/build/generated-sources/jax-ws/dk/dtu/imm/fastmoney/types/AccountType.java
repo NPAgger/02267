@@ -28,7 +28,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "accountType", propOrder = {
+@XmlType(name = "accountType", namespace = "http://types.fastmoney.imm.dtu.dk", propOrder = {
     "name",
     "number"
 })
