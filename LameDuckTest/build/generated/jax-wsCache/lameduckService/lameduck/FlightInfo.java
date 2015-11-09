@@ -18,7 +18,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="airlineReservationService" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="price" type="{http://www.w3.org/2001/XMLSchema}float"/>
+ *         &lt;element name="price" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *         &lt;element name="bookingNumber" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *         &lt;element name="flight" type="{flightservice}flight"/>
  *       &lt;/sequence>
@@ -40,7 +40,7 @@ public class FlightInfo {
 
     @XmlElement(required = true)
     protected String airlineReservationService;
-    protected float price;
+    protected int price;
     protected int bookingNumber;
     @XmlElement(required = true)
     protected Flight flight;
@@ -73,7 +73,7 @@ public class FlightInfo {
      * Gets the value of the price property.
      * 
      */
-    public float getPrice() {
+    public int getPrice() {
         return price;
     }
 
@@ -81,7 +81,7 @@ public class FlightInfo {
      * Sets the value of the price property.
      * 
      */
-    public void setPrice(float value) {
+    public void setPrice(int value) {
         this.price = value;
     }
 

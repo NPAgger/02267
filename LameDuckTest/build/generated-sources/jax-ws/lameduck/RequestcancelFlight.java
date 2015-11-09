@@ -19,7 +19,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="bookingNumber" type="{http://www.w3.org/2001/XMLSchema}int"/>
- *         &lt;element name="price" type="{http://www.w3.org/2001/XMLSchema}float"/>
+ *         &lt;element name="price" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *         &lt;element name="creditCardInfo" type="{http://types.fastmoney.imm.dtu.dk}creditCardInfoType"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
@@ -39,7 +39,7 @@ import javax.xml.bind.annotation.XmlType;
 public class RequestcancelFlight {
 
     protected int bookingNumber;
-    protected float price;
+    protected int price;
     @XmlElement(required = true)
     protected CreditCardInfoType creditCardInfo;
 
@@ -63,7 +63,7 @@ public class RequestcancelFlight {
      * Gets the value of the price property.
      * 
      */
-    public float getPrice() {
+    public int getPrice() {
         return price;
     }
 
@@ -71,7 +71,7 @@ public class RequestcancelFlight {
      * Sets the value of the price property.
      * 
      */
-    public void setPrice(float value) {
+    public void setPrice(int value) {
         this.price = value;
     }
 
