@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?><definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://niceview.ws" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" name="NiceViewWSDL" targetNamespace="http://niceview.ws">
-<wsdl:import namespace="http://niceview.ws" location="NiceViewWSDL.wsdl"/>
-<wsdl:service name="NiceViewWSDLPortTypeService">
-<wsdl:port name="NiceViewWSDLPortTypePort" binding="tns:NiceViewWSDLPortTypeBinding">
-<soap:address location="REPLACE_WITH_ACTUAL_URL"/>
-</wsdl:port>
-</wsdl:service>
-</definitions>
