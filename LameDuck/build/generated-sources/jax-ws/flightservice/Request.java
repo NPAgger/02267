@@ -41,7 +41,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 public class Request {
 
     @XmlElement(namespace = "flightservice", required = true)
-    @XmlSchemaType(name = "date")
+    @XmlSchemaType(name = "dateTime")
     protected XMLGregorianCalendar date;
     @XmlElement(namespace = "flightservice", required = true)
     protected String destination;

@@ -40,7 +40,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "creditCardInfoType", namespace = "http://types.fastmoney.imm.dtu.dk", propOrder = {
+@XmlType(name = "creditCardInfoType", propOrder = {
     "expirationDate",
     "name",
     "number"

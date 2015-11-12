@@ -13,6 +13,7 @@ import javax.jws.WebService;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
+import javax.xml.datatype.DatatypeConstants;
 import javax.xml.ws.WebServiceRef;
 
 /**
@@ -82,7 +83,7 @@ public class LameDuck {
         
         for(int i = 0; i < staticFlightData.size(); i++){
             if(input.getOrigin().equals(staticFlightData.get(i).getFlight().getOrigin()) && input.getDestination().equals(staticFlightData.get(i).getFlight().getDestination())){
-                if(input.getDate().equals(staticFlightData.get(i).getFlight().getDeparture())){
+                if(input.getDate().equals((staticFlightData.get(i).getFlight().getDeparture()))){
                     flightservice.FlightInfo info = new flightservice.FlightInfo();
                     info.setBookingNumber(staticFlightData.get(i).getBookingNumber());
                     info.setPrice(staticFlightData.get(i).getPrice());

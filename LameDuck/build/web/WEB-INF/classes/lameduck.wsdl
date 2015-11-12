@@ -29,7 +29,7 @@
                 </xsd:sequence>
             </xsd:complexType>
             <xsd:element name="listOfFlights" type="tns:listOfFlights"></xsd:element>
-            <xsd:element name="date" type="xsd:date"></xsd:element>
+            <xsd:element name="date" type="xsd:dateTime"></xsd:element>
             <xsd:element name="origin" type="xsd:string"></xsd:element>
             <xsd:element name="destination" type="xsd:string"></xsd:element>
             <xsd:element name="request">
