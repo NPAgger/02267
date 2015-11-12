@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" prefer="system">
+    <system systemId="http://localhost:8080/NiceView/NiceViewService?wsdl" uri="src/conf/xml-resources/web-services/FromURL/wsdl/localhost_8080/NiceView/NiceViewService.wsdl"/>
+    <system systemId="http://localhost:8080/NiceView/NiceViewService?xsd=1" uri="src/conf/xml-resources/web-services/FromURL/wsdl/localhost_8080/NiceView/NiceViewService.xsd_1.xsd"/>
+    <system systemId="file:/C:/Users/Nis/Documents/NetBeansProjects/NiceView/src/java/WSDL/NiceViewWSDL.wsdl" uri="src/conf/xml-resources/web-services/FromLocal/wsdl/NiceViewWSDL.wsdl"/>
+    <system systemId="file:/C:/Users/Nis/Documents/NetBeansProjects/NiceView/src/java/NiceViewWSDL.wsdl" uri="src/conf/xml-resources/web-services/NiceViewService/wsdl/NiceViewWSDL.wsdl"/>
+</catalog>
