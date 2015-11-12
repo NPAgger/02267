@@ -2,10 +2,9 @@
 <definitions name="lameduck" targetNamespace="flightservice"
     xmlns="http://schemas.xmlsoap.org/wsdl/"
     xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
-    xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="flightservice" xmlns:ns0="http://types.fastmoney.imm.dtu.dk" xmlns:plnk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns1="http://LameDuckTypes">
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="flightservice" xmlns:plnk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns1="http://LameDuckTypes">
     <types>
         <xsd:schema targetNamespace="flightservice" xmlns:tns="flightservice">
-            <xsd:import namespace="http://types.fastmoney.imm.dtu.dk" schemaLocation="http://fastmoney.imm.dtu.dk:8080/BankServiceTypes.xsd" />
             <xsd:import namespace="http://LameDuckTypes" schemaLocation="LameDuckTypes.xsd" />
             
         </xsd:schema>
@@ -69,7 +68,9 @@
             <output name="output2">
                 <soap:body/>
             </output>
-            <fault name="fault1"/>
+            <fault name="fault1">
+                <soap:fault name="fault1"/>
+            </fault>
         </operation>
         <operation name="cancelFlight">
             <soap:operation/>
@@ -79,7 +80,9 @@
             <output name="output3">
                 <soap:body/>
             </output>
-            <fault name="fault1"/>
+            <fault name="fault1">
+                <soap:fault name="fault1"/>
+            </fault>
         </operation>
     </binding>
     <service name="lameduckService">

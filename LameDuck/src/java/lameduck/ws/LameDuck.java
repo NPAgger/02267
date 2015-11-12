@@ -7,7 +7,7 @@ package lameduck.ws;
 
 import dk.dtu.imm.fastmoney.types.*;
 import java.util.Arrays;
-import flightservice.*;
+import lameducktypes.*;
 import java.util.List;
 import javax.jws.WebService;
 import javax.xml.datatype.DatatypeConfigurationException;
@@ -20,7 +20,7 @@ import javax.xml.ws.WebServiceRef;
  *
  * @author Andri
  */
-@WebService(serviceName = "lameduckService", portName = "lameduckPortTypeBindingPort", endpointInterface = "flightservice.LameduckPortType", targetNamespace = "flightservice", wsdlLocation = "WEB-INF/wsdl/LameDuck/lameduck.wsdl")
+@WebService(serviceName = "lameduckService", portName = "lameduckPortTypeBindingPort", endpointInterface = "lameducktypes.LameduckPortType", targetNamespace = "lameducktypes", wsdlLocation = "WEB-INF/wsdl/LameDuck/lameduck.wsdl")
 public class LameDuck {
     @WebServiceRef(wsdlLocation = "WEB-INF/wsdl/fastmoney.imm.dtu.dk_8080/BankService.wsdl")
     private BankService service_1;
@@ -78,17 +78,17 @@ public class LameDuck {
     }
     
 
-    public flightservice.ListOfFlights getFlights(flightservice.Request input) {
-        flightservice.ListOfFlights list = new flightservice.ListOfFlights();
+    public lameducktypes.ListOfFlights getFlights(lameducktypes.Request input) {
+        lameducktypes.ListOfFlights list = new lameducktypes.ListOfFlights();
         
         for(int i = 0; i < staticFlightData.size(); i++){
             if(input.getOrigin().equals(staticFlightData.get(i).getFlight().getOrigin()) && input.getDestination().equals(staticFlightData.get(i).getFlight().getDestination())){
                 if(input.getDate().equals((staticFlightData.get(i).getFlight().getDeparture()))){
-                    flightservice.FlightInfo info = new flightservice.FlightInfo();
+                    lameducktypes.FlightInfo info = new lameducktypes.FlightInfo();
                     info.setBookingNumber(staticFlightData.get(i).getBookingNumber());
                     info.setPrice(staticFlightData.get(i).getPrice());
                     info.setAirlineReservationService(staticFlightData.get(i).getAirlineReservationService());
-                    flightservice.Flight flight = new flightservice.Flight();
+                    lameducktypes.Flight flight = new lameducktypes.Flight();
                     flight.setOrigin(staticFlightData.get(i).getFlight().getOrigin());
                     flight.setDestination(staticFlightData.get(i).getFlight().getDestination());
                     flight.setDeparture(staticFlightData.get(i).getFlight().getDeparture());
@@ -103,7 +103,7 @@ public class LameDuck {
         return list;
     }
 
-    public boolean bookFlight(flightservice.RequestbookFlight input) throws flightservice.BookFlightFault_Exception {
+    public boolean bookFlight(lameducktypes.RequestbookFlight input) throws flightservice.BookFlightFault {
         boolean status = false;
         int price = 0;
         for (FlightInfo staticFlightData1 : staticFlightData) {
@@ -120,24 +120,24 @@ public class LameDuck {
             }
             catch (CreditCardFaultMessage fault){
                 String message = fault.getMessage();
-                flightservice.BookFlightFault bff = new flightservice.BookFlightFault();
+                lameducktypes.BookFlightFault bff = new lameducktypes.BookFlightFault();
                 bff.setMessage(fault.getFaultInfo().getMessage());
-                flightservice.BookFlightFault_Exception ex = new flightservice.BookFlightFault_Exception(message, bff);
+                flightservice.BookFlightFault ex = new flightservice.BookFlightFault(message, bff);
                 throw ex;
             }
             
         }
         else {
             String message = "Flight not found";
-            flightservice.BookFlightFault bff = new flightservice.BookFlightFault();
+            lameducktypes.BookFlightFault bff = new lameducktypes.BookFlightFault();
             bff.setMessage(message);
-            flightservice.BookFlightFault_Exception ex = new flightservice.BookFlightFault_Exception(message, bff);
+            flightservice.BookFlightFault ex = new flightservice.BookFlightFault(message, bff);
             throw ex;
         }
         return status;
     }
 
-    public boolean cancelFlight(flightservice.RequestcancelFlight input) throws flightservice.CancelFlightFault_Exception {
+    public boolean cancelFlight(lameducktypes.RequestcancelFlight input) throws flightservice.CancelFlightFault {
         boolean status;
         int halfPrice = (int) (input.getPrice()*0.5);
         try{
@@ -146,9 +146,9 @@ public class LameDuck {
         }
         catch(CreditCardFaultMessage fault){
             String message = fault.getMessage();
-            flightservice.CancelFlightFault cff = new flightservice.CancelFlightFault();
+            lameducktypes.CancelFlightFault cff = new lameducktypes.CancelFlightFault();
             cff.setMessage(fault.getFaultInfo().getMessage());
-            flightservice.CancelFlightFault_Exception ex = new flightservice.CancelFlightFault_Exception(message, cff);
+            flightservice.CancelFlightFault ex = new flightservice.CancelFlightFault(message, cff);
             throw ex;
         }
         return status;
