@@ -7,10 +7,6 @@ import javax.jws.WebResult;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 import javax.xml.bind.annotation.XmlSeeAlso;
-import lameducktypes.ListOfFlights;
-import lameducktypes.Request;
-import lameducktypes.RequestbookFlight;
-import lameducktypes.RequestcancelFlight;
 
 
 /**
@@ -23,7 +19,7 @@ import lameducktypes.RequestcancelFlight;
 @SOAPBinding(parameterStyle = SOAPBinding.ParameterStyle.BARE)
 @XmlSeeAlso({
     dk.dtu.imm.fastmoney.types.ObjectFactory.class,
-    lameducktypes.ObjectFactory.class
+    flightservice.ObjectFactory.class
 })
 public interface LameduckPortType {
 
@@ -32,12 +28,12 @@ public interface LameduckPortType {
      * 
      * @param input
      * @return
-     *     returns lameducktypes.ListOfFlights
+     *     returns flightservice.ListOfFlights
      */
     @WebMethod
-    @WebResult(name = "listOfFlights", targetNamespace = "http://LameDuckTypes", partName = "output")
+    @WebResult(name = "listOfFlights", targetNamespace = "flightservice", partName = "output")
     public ListOfFlights getFlights(
-        @WebParam(name = "request", targetNamespace = "http://LameDuckTypes", partName = "input")
+        @WebParam(name = "request", targetNamespace = "flightservice", partName = "input")
         Request input);
 
     /**
@@ -45,14 +41,14 @@ public interface LameduckPortType {
      * @param input
      * @return
      *     returns boolean
-     * @throws BookFlightFault
+     * @throws BookFlightFault_Exception
      */
     @WebMethod
-    @WebResult(name = "status", targetNamespace = "http://LameDuckTypes", partName = "output")
+    @WebResult(name = "status", targetNamespace = "flightservice", partName = "output")
     public boolean bookFlight(
-        @WebParam(name = "requestbookFlight", targetNamespace = "http://LameDuckTypes", partName = "input")
+        @WebParam(name = "requestbookFlight", targetNamespace = "flightservice", partName = "input")
         RequestbookFlight input)
-        throws BookFlightFault
+        throws BookFlightFault_Exception
     ;
 
     /**
@@ -60,14 +56,14 @@ public interface LameduckPortType {
      * @param input
      * @return
      *     returns boolean
-     * @throws CancelFlightFault
+     * @throws CancelFlightFault_Exception
      */
     @WebMethod
-    @WebResult(name = "status", targetNamespace = "http://LameDuckTypes", partName = "output")
+    @WebResult(name = "status", targetNamespace = "flightservice", partName = "output")
     public boolean cancelFlight(
-        @WebParam(name = "requestcancelFlight", targetNamespace = "http://LameDuckTypes", partName = "input")
+        @WebParam(name = "requestcancelFlight", targetNamespace = "flightservice", partName = "input")
         RequestcancelFlight input)
-        throws CancelFlightFault
+        throws CancelFlightFault_Exception
     ;
 
 }
