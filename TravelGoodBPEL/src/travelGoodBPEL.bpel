@@ -9,7 +9,7 @@
     xmlns:sxt="http://www.sun.com/wsbpel/2.0/process/executable/SUNExtension/Trace" 
     xmlns:sxed="http://www.sun.com/wsbpel/2.0/process/executable/SUNExtension/Editor2"
     xmlns:sxat="http://www.sun.com/wsbpel/2.0/process/executable/SUNExtension/Attachment"
-    xmlns:sxeh="http://www.sun.com/wsbpel/2.0/process/executable/SUNExtension/ErrorHandling" xmlns:ns1="http://travelgood.ws">
+    xmlns:sxeh="http://www.sun.com/wsbpel/2.0/process/executable/SUNExtension/ErrorHandling" xmlns:ns1="http://travelgood.ws" xmlns:ns2="http://lameducktypes">
    <import namespace="http://enterprise.netbeans.org/bpel/lameduckServiceWrapper" location="lameduckServiceWrapper.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
    <import namespace="http://lameduck.ws" location="http://localhost:8080/LameDuck/lameduckService?wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
    <import namespace="http://travelgood.ws" location="TravelGood.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
@@ -18,6 +18,7 @@
        <partnerLink name="PartnerLink1" xmlns:tns="http://travelgood.ws" partnerLinkType="tns:TravelGood" myRole="TravelGoodPortTypeRole"/>
    </partnerLinks>
    <variables>
+      <variable name="Fault1FaultVar" messageType="ns1:BookItineraryFault"/>
       <variable name="BookItineraryOut" xmlns:tns="http://travelgood.ws" messageType="tns:BookItineraryResponse"/>
       <variable name="BookItineraryIn" xmlns:tns="http://travelgood.ws" messageType="tns:BookItineraryRequest"/>
       <variable name="GetFlightsOut" xmlns:tns="http://travelgood.ws" messageType="tns:GetFlightsResponse"/>
@@ -50,20 +51,20 @@
       <reply name="ReplyCreateItinerary" partnerLink="PartnerLink1" operation="CreateItinerary" xmlns:tns="http://travelgood.ws" portType="tns:TravelGoodPortType" variable="CreateItineraryOut"/>
       <while name="Planning">
          <condition>not($PlanningDone)</condition>
-         <pick name="Pick1">
+         <pick name="PlanningPick">
             <onMessage partnerLink="PartnerLink1" operation="GetFlights" portType="tns:TravelGoodPortType" variable="GetFlightsIn" xmlns:tns="http://travelgood.ws">
                <correlations>
                   <correlation set="ItineraryCorrelationSet" initiate="no"/>
                </correlations>
-               <sequence name="Sequence1">
-                  <assign name="Assign2">
+               <sequence name="GettingFlights">
+                  <assign name="TGtoLD">
                      <copy>
-                        <from variable="GetFlightsIn" part="GetFlightsRequest"/>
+                        <from>$GetFlightsIn.GetFlightsRequest/ns2:request</from>
                         <to variable="LameDuckGetFlightsIn" part="input"/>
                      </copy>
                   </assign>
                   <invoke name="LameDuckGetFlights" partnerLink="LameDuckPartnerLink" operation="getFlights" xmlns:tns="http://lameduck.ws" portType="tns:lameduckPortType" inputVariable="LameDuckGetFlightsIn" outputVariable="LameDuckGetFlightsOut"/>
-                  <assign name="GettingFlights">
+                  <assign name="LDtoTG">
                      <copy>
                         <from variable="LameDuckGetFlightsOut" part="output"/>
                         <to variable="GetFlightsOut" part="GetFlightsResponse"/>
@@ -76,7 +77,7 @@
                 <correlations>
                     <correlation set="ItineraryCorrelationSet" initiate="no"/>
                 </correlations>
-                <sequence name="Sequence2">
+                <sequence name="BookingItinerary">
                   <assign name="Assign1">
                      <copy>
                            <from>true()</from>
@@ -87,7 +88,7 @@
                         <to variable="BookItineraryOut" part="BookItineraryResponse"/>
                      </copy>
                   </assign>
-                  <reply name="Reply1" partnerLink="PartnerLink1" operation="BookItinerary" portType="tns:TravelGoodPortType" variable="BookItineraryOut"/>
+                  <reply name="ReplyBookItinerary" partnerLink="PartnerLink1" operation="BookItinerary" portType="tns:TravelGoodPortType" variable="BookItineraryOut"/>
                </sequence>
             </onMessage>
          </pick>
