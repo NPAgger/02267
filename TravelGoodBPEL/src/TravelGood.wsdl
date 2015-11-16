@@ -36,6 +36,14 @@
             <xsd:simpleType name="itineraryIdType">
                 <xsd:restriction base="xsd:int"/>
             </xsd:simpleType>
+            <xsd:complexType name="getFlightsRequestType">
+                <xsd:sequence>
+                    <xsd:element ref="tns:CustomerName"/>
+                    <xsd:element ref="tns:ItineraryId"/>
+                    <xsd:element ref="ns0:request"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:element name="GetFlightsRequest" type="tns:getFlightsRequestType"></xsd:element>
         </xsd:schema>
     </types>
     <message name="CreateItineraryRequest">
@@ -45,7 +53,7 @@
         <part name="CreateItineraryResponse" element="tns:Status"/>
     </message>
     <message name="GetFlightsRequest">
-        <part name="GetFlightsRequest" element="ns0:request"/>
+        <part name="GetFlightsRequest" element="tns:GetFlightsRequest"/>
     </message>
     <message name="GetFlightsResponse">
         <part name="GetFlightsResponse" element="ns0:listOfFlights"/>
@@ -130,6 +138,12 @@ A partner link type characterizes the conversational relationship between two se
         <vprop:query>tns:CustomerName</vprop:query>
     </vprop:propertyAlias>
     <vprop:propertyAlias propertyName="tns:ItineraryId" messageType="tns:BookItineraryRequest" part="BookItineraryRequest">
+        <vprop:query>tns:ItineraryId</vprop:query>
+    </vprop:propertyAlias>
+    <vprop:propertyAlias propertyName="tns:CustomerName" messageType="tns:GetFlightsRequest" part="GetFlightsRequest">
+        <vprop:query>tns:CustomerName</vprop:query>
+    </vprop:propertyAlias>
+    <vprop:propertyAlias propertyName="tns:ItineraryId" messageType="tns:GetFlightsRequest" part="GetFlightsRequest">
         <vprop:query>tns:ItineraryId</vprop:query>
     </vprop:propertyAlias>
 </definitions>
