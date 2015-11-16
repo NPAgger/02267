@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<casa xmlns="http://java.sun.com/xml/ns/casa" xmlns:ns1="http://lameduck.ws" xmlns:ns2="http://travelgood.ws" xmlns:ns3="http://enterprise.netbeans.org/bpel/TravelGoodBPEL/travelGoodBPEL" xmlns:xlink="http://www.w3.org/2000/xlink">
+    <endpoints>
+        <endpoint endpoint-name="lameduckPortTypeBindingPort" interface-name="ns1:lameduckPortType" name="endpoint1" service-name="ns1:lameduckService"/>
+        <endpoint endpoint-name="TravelGoodBindingPort" interface-name="ns2:TravelGoodPortType" name="endpoint2" service-name="ns2:TravelGoodService"/>
+        <endpoint display-name="PartnerLink1" endpoint-name="TravelGoodPortTypeRole_myRole" file-path="travelGoodBPEL.bpel" interface-name="ns2:TravelGoodPortType" name="endpoint3" process-name="travelGoodBPEL" service-name="ns3:PartnerLink1"/>
+        <endpoint display-name="LameDuckPartnerLink" endpoint-name="lameduckRole_partnerRole" file-path="travelGoodBPEL.bpel" interface-name="ns1:lameduckPortType" name="endpoint4" process-name="travelGoodBPEL" service-name="ns3:LameDuckPartnerLink"/>
+    </endpoints>
+    <service-units>
+        <service-engine-service-unit artifacts-zip="TravelGoodBPEL.jar" component-name="sun-bpel-engine" defined="true" description="Represents this Service Unit" internal="true" name="TravelGoodApp-TravelGoodBPEL" unit-name="TravelGoodBPEL" unknown="false" x="144" y="99">
+            <provides endpoint="endpoint3"/>
+            <consumes endpoint="endpoint4"/>
+        </service-engine-service-unit>
+        <binding-component-service-unit artifacts-zip="sun-http-binding.jar" component-name="sun-http-binding" description="Represents this Service Unit" name="TravelGoodApp-sun-http-binding" unit-name="sun-http-binding">
+            <ports>
+                <port x="67" y="118">
+                    <link xlink:href="../jbiServiceUnits/TravelGoodBPEL/localhost_8080/LameDuck/lameduckService.wsdl#xpointer(/definitions/service[@name='lameduckService']/port[@name='lameduckPortTypeBindingPort'])" xlink:type="simple"/>
+                    <consumes endpoint="endpoint1"/>
+                    <provides endpoint="endpoint1"/>
+                </port>
+                <port x="67" y="39">
+                    <link xlink:href="../jbiServiceUnits/TravelGoodBPEL/TravelGood.wsdl#xpointer(/definitions/service[@name='TravelGoodService']/port[@name='TravelGoodBindingPort'])" xlink:type="simple"/>
+                    <consumes endpoint="endpoint2"/>
+                    <provides endpoint="endpoint2"/>
+                </port>
+            </ports>
+        </binding-component-service-unit>
+    </service-units>
+    <connections>
+        <connection consumer="endpoint4" provider="endpoint1" state="unchanged"/>
+        <connection consumer="endpoint2" provider="endpoint3" state="unchanged"/>
+    </connections>
+    <porttypes>
+        <link xlink:href="../jbiServiceUnits/TravelGoodBPEL/localhost_8080/LameDuck/lameduckService.wsdl#xpointer(/definitions/portType[@name='lameduckPortType'])" xlink:type="simple"/>
+        <link xlink:href="../jbiServiceUnits/TravelGoodBPEL/TravelGood.wsdl#xpointer(/definitions/portType[@name='TravelGoodPortType'])" xlink:type="simple"/>
+    </porttypes>
+    <bindings>
+        <link xlink:href="../jbiServiceUnits/TravelGoodBPEL/localhost_8080/LameDuck/lameduckService.wsdl#xpointer(/definitions/binding[@name='lameduckPortTypeBinding'])" xlink:type="simple"/>
+        <link xlink:href="../jbiServiceUnits/TravelGoodBPEL/TravelGood.wsdl#xpointer(/definitions/binding[@name='TravelGoodPortTypeBinding'])" xlink:type="simple"/>
+    </bindings>
+    <services>
+        <link xlink:href="../jbiServiceUnits/TravelGoodBPEL/localhost_8080/LameDuck/lameduckService.wsdl#xpointer(/definitions/service[@name='lameduckService'])" xlink:type="simple"/>
+        <link xlink:href="../jbiServiceUnits/TravelGoodBPEL/TravelGood.wsdl#xpointer(/definitions/service[@name='TravelGoodService'])" xlink:type="simple"/>
+    </services>
+    <regions>
+        <region name="WSDL Endpoints" width="150"/>
+        <region name="JBI Modules" width="500"/>
+        <region name="External Modules" width="200"/>
+    </regions>
+</casa>
