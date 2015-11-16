@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:ns0="http://lameducktypes" xmlns:plnk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://travelgood.ws" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="TravelGood" targetNamespace="http://travelgood.ws">
+  <types>
+    <xsd:schema targetNamespace="http://travelgood.ws">
+            <xsd:import namespace="http://lameducktypes" schemaLocation="http://localhost:8080/LameDuck/lameduckService?xsd=1"/>
+            <xsd:complexType name="createItineraryRequestType">
+                <xsd:sequence>
+                    <xsd:element ref="tns:CustomerName"/>
+                    <xsd:element ref="tns:ItineraryId"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:element name="CustomerName" type="tns:customerNameType"/>
+            <xsd:element name="ItineraryId" type="tns:itineraryIdType"/>
+            <xsd:element name="CreateItineraryRequest" type="tns:createItineraryRequestType"/>
+            <xsd:element name="Status" type="xsd:boolean"/>
+            <xsd:complexType name="bookItineraryRequestType">
+                <xsd:sequence>
+                    <xsd:element ref="tns:CustomerName"/>
+                    <xsd:element ref="tns:ItineraryId"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:element name="BookItineraryRequest" type="tns:bookItineraryRequestType"/>
+            <xsd:element name="Message" type="xsd:string"/>
+            <xsd:complexType name="bookItineraryFaultType">
+                <xsd:sequence>
+                    <xsd:element ref="tns:Message"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:element name="BookItineraryFault" type="tns:bookItineraryFaultType"/>
+            <xsd:simpleType name="customerNameType">
+                <xsd:restriction base="xsd:string"/>
+            </xsd:simpleType>
+            <xsd:simpleType name="itineraryIdType">
+                <xsd:restriction base="xsd:int"/>
+            </xsd:simpleType>
+            <xsd:complexType name="getFlightsRequestType">
+                <xsd:sequence>
+                    <xsd:element ref="tns:CustomerName"/>
+                    <xsd:element ref="tns:ItineraryId"/>
+                    <xsd:element ref="ns0:request"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:element name="GetFlightsRequest" type="tns:getFlightsRequestType"/>
+        </xsd:schema>
+  </types>
+  <message name="CreateItineraryResponse">
+    <part element="tns:Status" name="CreateItineraryResponse">
+    </part>
+  </message>
+  <message name="CreateItineraryRequest">
+    <part element="tns:CreateItineraryRequest" name="CreateItineraryRequest">
+    </part>
+  </message>
+  <message name="BookItineraryResponse">
+    <part element="tns:Status" name="BookItineraryResponse">
+    </part>
+  </message>
+  <message name="BookItineraryRequest">
+    <part element="tns:BookItineraryRequest" name="BookItineraryRequest">
+    </part>
+  </message>
+  <message name="GetFlightsRequest">
+    <part element="tns:GetFlightsRequest" name="GetFlightsRequest">
+    </part>
+  </message>
+  <message name="BookItineraryFault">
+    <part element="tns:BookItineraryFault" name="BookItineraryFault">
+    </part>
+  </message>
+  <message name="GetFlightsResponse">
+    <part element="ns0:listOfFlights" name="GetFlightsResponse">
+    </part>
+  </message>
+  <portType name="TravelGoodPortType">
+    <operation name="CreateItinerary">
+      <input message="tns:CreateItineraryRequest" name="input1">
+    </input>
+      <output message="tns:CreateItineraryResponse" name="output1">
+    </output>
+    </operation>
+    <operation name="GetFlights">
+      <input message="tns:GetFlightsRequest" name="input2">
+    </input>
+      <output message="tns:GetFlightsResponse" name="output2">
+    </output>
+    </operation>
+    <operation name="BookItinerary">
+      <input message="tns:BookItineraryRequest" name="input3">
+    </input>
+      <output message="tns:BookItineraryResponse" name="output3">
+    </output>
+      <fault message="tns:BookItineraryFault" name="fault1">
+    </fault>
+    </operation>
+  </portType>
+  <binding name="TravelGoodPortTypeBinding" type="tns:TravelGoodPortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="CreateItinerary">
+      <soap:operation/>
+      <input name="input1">
+        <soap:body use="literal"/>
+      </input>
+      <output name="output1">
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="GetFlights">
+      <soap:operation/>
+      <input name="input2">
+        <soap:body use="literal"/>
+      </input>
+      <output name="output2">
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="BookItinerary">
+      <soap:operation/>
+      <input name="input3">
+        <soap:body use="literal"/>
+      </input>
+      <output name="output3">
+        <soap:body use="literal"/>
+      </output>
+      <fault name="fault1">
+        <soap:fault name="fault1" use="literal"/>
+      </fault>
+    </operation>
+  </binding>
+  <service name="TravelGoodService">
+    <port binding="tns:TravelGoodPortTypeBinding" name="TravelGoodBindingPort">
+      <soap:address location="http://10.16.129.15:8070/travelGoodService"/>
+    </port>
+  </service>
+    <plnk:partnerLinkType name="TravelGood">
+        <!-- A partner link type is automatically generated when a new port type is added. Partner link types are used by BPEL processes. 
+In a BPEL process, a partner link represents the interaction between the BPEL process and a partner service. Each partner link is associated with a partner link type.
+A partner link type characterizes the conversational relationship between two services. The partner link type can have one or two roles.-->
+        <plnk:role name="TravelGoodPortTypeRole" portType="tns:TravelGoodPortType"/>
+    </plnk:partnerLinkType>
+    <vprop:property name="CustomerName" type="tns:customerNameType"/>
+    <vprop:property name="ItineraryId" type="tns:itineraryIdType"/>
+    <vprop:propertyAlias messageType="tns:CreateItineraryRequest" part="CreateItineraryRequest" propertyName="tns:CustomerName">
+        <vprop:query>tns:CustomerName</vprop:query>
+    </vprop:propertyAlias>
+    <vprop:propertyAlias messageType="tns:CreateItineraryRequest" part="CreateItineraryRequest" propertyName="tns:ItineraryId">
+        <vprop:query>tns:ItineraryId</vprop:query>
+    </vprop:propertyAlias>
+    <vprop:propertyAlias messageType="tns:BookItineraryRequest" part="BookItineraryRequest" propertyName="tns:CustomerName">
+        <vprop:query>tns:CustomerName</vprop:query>
+    </vprop:propertyAlias>
+    <vprop:propertyAlias messageType="tns:BookItineraryRequest" part="BookItineraryRequest" propertyName="tns:ItineraryId">
+        <vprop:query>tns:ItineraryId</vprop:query>
+    </vprop:propertyAlias>
+    <vprop:propertyAlias messageType="tns:GetFlightsRequest" part="GetFlightsRequest" propertyName="tns:CustomerName">
+        <vprop:query>tns:CustomerName</vprop:query>
+    </vprop:propertyAlias>
+    <vprop:propertyAlias messageType="tns:GetFlightsRequest" part="GetFlightsRequest" propertyName="tns:ItineraryId">
+        <vprop:query>tns:ItineraryId</vprop:query>
+    </vprop:propertyAlias>
+</definitions>
