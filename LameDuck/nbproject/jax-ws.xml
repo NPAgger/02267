@@ -7,7 +7,7 @@
       <local-wsdl-file>lameduck.wsdl</local-wsdl-file>
       <service-name>lameduckService</service-name>
       <port-name>lameduckPortTypeBindingPort</port-name>
-      <package-name>flightservice</package-name>
+      <package-name>ws.lameduck</package-name>
       <catalog-file>catalog.xml</catalog-file>
       <use-provider>false</use-provider>
       <wsimport-options>

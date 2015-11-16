@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-            targetNamespace="flightservice"
-            xmlns:tns="flightservice"
+            targetNamespace="http://lameducktypes"
+            xmlns:tns="http://lameducktypes"
     xmlns:ns0="http://types.fastmoney.imm.dtu.dk">
     <xsd:import namespace="http://types.fastmoney.imm.dtu.dk" schemaLocation="http://fastmoney.imm.dtu.dk:8080/BankServiceTypes.xsd"/>
     <xsd:complexType name="flight">

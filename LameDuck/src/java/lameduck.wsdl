@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<definitions name="lameduck" targetNamespace="flightservice"
+<definitions name="lameduck" targetNamespace="http://lameduck.ws"
     xmlns="http://schemas.xmlsoap.org/wsdl/"
     xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
     xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
-    xmlns:tns="flightservice" 
+    xmlns:tns="http://lameduck.ws" 
     xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" 
-    xmlns:ns0="http://types.fastmoney.imm.dtu.dk">
+    xmlns:ns0="http://types.fastmoney.imm.dtu.dk"
+    xmlns:ns1="http://lameducktypes" xmlns:ns2="lameducktypes">
     <types>
-        <xsd:schema targetNamespace="flightservice">
-            <xsd:import namespace="flightservice" schemaLocation="LameDuckTypes.xsd" />            
+        <xsd:schema>
+            <xsd:import namespace="http://lameducktypes" schemaLocation="LameDuckTypes.xsd" />            
         </xsd:schema>
 <!--        <xsd:schema targetNamespace="flightservice">
             <xsd:import namespace="http://types.fastmoney.imm.dtu.dk" schemaLocation="http://fastmoney.imm.dtu.dk:8080/BankServiceTypes.xsd"/>
@@ -82,28 +83,28 @@
         </xsd:schema>-->
     </types>
     <message name="getFlightRequest">
-        <part name="input" element="tns:request"/>
+        <part name="input" element="ns1:request"/>
     </message>
     <message name="getFlightResponse">
-        <part name="output" element="tns:listOfFlights"/>
+        <part name="output" element="ns1:listOfFlights"/>
     </message>
     <message name="bookFlightRequest">
-        <part name="input" element="tns:requestbookFlight"/>
+        <part name="input" element="ns1:requestbookFlight"/>
     </message>
     <message name="bookFlightResponse">
-        <part name="output" element="tns:status"/>
+        <part name="output" element="ns1:status"/>
     </message>
     <message name="bookFlightFault">
-        <part name="fault" element="tns:bookFlightFault"/>
+        <part name="fault" element="ns1:bookFlightFault"/>
     </message>
     <message name="cancelFlightRequest">
-        <part name="input" element="tns:requestcancelFlight"/>
+        <part name="input" element="ns1:requestcancelFlight"/>
     </message>
     <message name="cancelFlightResponse">
-        <part name="output" element="tns:status"/>
+        <part name="output" element="ns1:status"/>
     </message>
     <message name="cancelFlightFault">
-        <part name="fault" element="tns:cancelFlightFault"/>
+        <part name="fault" element="ns1:cancelFlightFault"/>
     </message>
     <portType name="lameduckPortType">
         <operation name="getFlights">

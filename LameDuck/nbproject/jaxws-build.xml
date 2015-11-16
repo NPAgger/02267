@@ -59,7 +59,7 @@
         </copy>
     </target>
     <target name="wsimport-service-clean-LameDuck" depends="-init-project">
-        <delete dir="${build.generated.sources.dir}/jax-ws/flightservice"/>
+        <delete dir="${build.generated.sources.dir}/jax-ws/ws/lameduck"/>
         <delete dir="${build.generated.dir}/jax-wsCache/service/LameDuck"/>
     </target>
     <target name="wsimport-client-generate" depends="wsimport-client-BankService"/>
