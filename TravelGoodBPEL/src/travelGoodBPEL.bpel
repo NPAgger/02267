@@ -9,7 +9,7 @@
     xmlns:sxt="http://www.sun.com/wsbpel/2.0/process/executable/SUNExtension/Trace" 
     xmlns:sxed="http://www.sun.com/wsbpel/2.0/process/executable/SUNExtension/Editor2"
     xmlns:sxat="http://www.sun.com/wsbpel/2.0/process/executable/SUNExtension/Attachment"
-    xmlns:sxeh="http://www.sun.com/wsbpel/2.0/process/executable/SUNExtension/ErrorHandling" xmlns:ns1="http://travelgood.ws" xmlns:ns2="http://lameducktypes">
+    xmlns:sxeh="http://www.sun.com/wsbpel/2.0/process/executable/SUNExtension/ErrorHandling" xmlns:ns1="http://travelgood.ws" xmlns:ns2="http://lameducktypes" xmlns:ns3="http://lameduck.ws">
    <import namespace="http://enterprise.netbeans.org/bpel/lameduckServiceWrapper" location="lameduckServiceWrapper.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
    <import namespace="http://lameduck.ws" location="http://localhost:8080/LameDuck/lameduckService?wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
    <import namespace="http://travelgood.ws" location="TravelGood.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
@@ -18,6 +18,18 @@
        <partnerLink name="PartnerLink1" xmlns:tns="http://travelgood.ws" partnerLinkType="tns:TravelGood" myRole="TravelGoodPortTypeRole"/>
    </partnerLinks>
    <variables>
+      <variable name="GetItineraryOut" messageType="ns1:GetItineraryResponse"/>
+      <variable name="GetItineraryIn" messageType="ns1:GetItineraryRequest"/>
+      <variable name="numberOfFlights" type="xs:int"/>
+      <variable name="AddFlightOut" messageType="ns1:AddFlightResponse"/>
+      <variable name="AddFlightIn" messageType="ns1:AddFlightRequest"/>
+      <variable name="flightBookingArray" element="ns1:flightBookingArray">
+         <sxed:editor>
+            <sxed:predicate path="$flightBookingArray/ns1:FlightBooking[$numberOfFlights + 1]" source="to"/>
+            <sxed:predicate path="$flightBookingArray/ns1:FlightBooking[$ForEach1Counter]" source="to"/>
+            <sxed:predicate path="$flightBookingArray/ns1:FlightBooking[$ForEach1Counter]" source="from"/>
+         </sxed:editor>
+      </variable>
       <variable name="Fault1FaultVar" messageType="ns1:BookItineraryFault"/>
       <variable name="BookItineraryOut" xmlns:tns="http://travelgood.ws" messageType="tns:BookItineraryResponse"/>
       <variable name="BookItineraryIn" xmlns:tns="http://travelgood.ws" messageType="tns:BookItineraryRequest"/>
@@ -46,6 +58,10 @@
          <copy>
             <from>false()</from>
             <to variable="PlanningDone"/>
+         </copy>
+         <copy>
+            <from>0</from>
+            <to variable="numberOfFlights"/>
          </copy>
       </assign>
       <reply name="ReplyCreateItinerary" partnerLink="PartnerLink1" operation="CreateItinerary" xmlns:tns="http://travelgood.ws" portType="tns:TravelGoodPortType" variable="CreateItineraryOut"/>
@@ -78,7 +94,90 @@
                     <correlation set="ItineraryCorrelationSet" initiate="no"/>
                 </correlations>
                 <sequence name="BookingItinerary">
-                  <assign name="Assign1">
+                   <forEach name="ForEach1" parallel="no" counterName="ForEach1Counter">
+                      <startCounterValue>1</startCounterValue>
+                      <finalCounterValue>$numberOfFlights</finalCounterValue>
+                      <scope name="Scope1">
+                         <variables>
+                            <variable name="BookItineraryFault" messageType="tns:BookItineraryFault"/>
+                            <variable name="LameDuckBookFlightOut" xmlns:tns="http://lameduck.ws" messageType="tns:bookFlightResponse"/>
+                            <variable name="LameDuckBookFlightIn" xmlns:tns="http://lameduck.ws" messageType="tns:bookFlightRequest"/>
+                         </variables>
+                         <faultHandlers>
+                            <catchAll>
+                               <sequence name="Sequence5">
+                                  <compensate name="Compensate1"/>
+                                  <assign name="Assign6">
+                                     <copy>
+                                        <from variable="flightBookingArray"/>
+                                        <to>$BookItineraryFault.BookItineraryFault/tns:flightBookingArray</to>
+                                     </copy>
+                                     <copy>
+                                        <from>'Booking failed.'</from>
+                                        <to>$BookItineraryFault.BookItineraryFault/tns:Message</to>
+                                     </copy>
+                                  </assign>
+                                  <reply name="BookItineraryFaultReply" partnerLink="PartnerLink1" operation="BookItinerary" portType="tns:TravelGoodPortType" faultName="tns:fault1" variable="BookItineraryFault"/>
+                               </sequence>
+                            </catchAll>
+                         </faultHandlers>
+                         <scope name="Scope2">
+                            <variables>
+                               <variable name="LameDuckCancelFlightOut" messageType="ns3:cancelFlightResponse"/>
+                               <variable name="LameDuckCancelFlightIn" messageType="ns3:cancelFlightRequest"/>
+                            </variables>
+                            <compensationHandler>
+                               <sequence name="Sequence4">
+                                  <assign name="Assign5">
+                                     <copy>
+                                        <from>$flightBookingArray/tns:FlightBooking[$ForEach1Counter]/bookingNumber
+                                           <sxed:editor>
+                                              <sxed:predicate path="$flightBookingArray/tns:FlightBooking[$ForEach1Counter]" source="from"/>
+                                           </sxed:editor>
+                                        </from>
+                                        <to>$LameDuckCancelFlightIn.input/bookingNumber</to>
+                                     </copy>
+                                     <copy>
+                                        <from>$flightBookingArray/tns:FlightBooking[$ForEach1Counter]/tns:Price
+                                           <sxed:editor>
+                                              <sxed:predicate path="$flightBookingArray/tns:FlightBooking[$ForEach1Counter]" source="from"/>
+                                           </sxed:editor>
+                                        </from>
+                                        <to>$LameDuckCancelFlightIn.input/price</to>
+                                     </copy>
+                                     <copy>
+                                        <from>$BookItineraryIn.BookItineraryRequest/tns:CreditCardInfo</from>
+                                        <to>$LameDuckCancelFlightIn.input/creditCardInfo</to>
+                                     </copy>
+                                     <copy>
+                                        <from>'Cancelled'</from>
+                                        <to>$flightBookingArray/tns:FlightBooking[$ForEach1Counter]/bookingStatus
+                                           <sxed:editor>
+                                              <sxed:predicate path="$flightBookingArray/tns:FlightBooking[$ForEach1Counter]" source="to"/>
+                                           </sxed:editor>
+                                        </to>
+                                     </copy>
+                                  </assign>
+                                  <invoke name="Invoke1" partnerLink="LameDuckPartnerLink" operation="cancelFlight" portType="ns3:lameduckPortType" inputVariable="LameDuckCancelFlightIn" outputVariable="LameDuckCancelFlightOut"/>
+                               </sequence>
+                            </compensationHandler>
+                            <sequence name="Sequence3">
+                               <invoke name="LameDuckBookFlight" partnerLink="LameDuckPartnerLink" operation="bookFlight" portType="ns3:lameduckPortType" inputVariable="LameDuckBookFlightIn" outputVariable="LameDuckBookFlightOut"/>
+                                  <assign name="Assign4">
+                                     <copy>
+                                           <from>'Confirmed'</from>
+                                              <to>$flightBookingArray/tns:FlightBooking[$ForEach1Counter]/bookingStatus
+                                                    <sxed:editor>
+                                                       <sxed:predicate path="$flightBookingArray/tns:FlightBooking[$ForEach1Counter]" source="to"/>
+                                                    </sxed:editor>
+                                              </to>
+                                        </copy>
+                                  </assign>
+                            </sequence>
+                         </scope>
+                      </scope>
+                   </forEach>
+                   <assign name="Assign1">
                      <copy>
                            <from>true()</from>
                               <to variable="PlanningDone"/>
@@ -89,6 +188,62 @@
                      </copy>
                   </assign>
                   <reply name="ReplyBookItinerary" partnerLink="PartnerLink1" operation="BookItinerary" portType="tns:TravelGoodPortType" variable="BookItineraryOut"/>
+               </sequence>
+            </onMessage>
+            <onMessage partnerLink="PartnerLink1" operation="AddFlight" portType="ns1:TravelGoodPortType" variable="AddFlightIn">
+               <correlations>
+                  <correlation set="ItineraryCorrelationSet" initiate="no"/>
+               </correlations>
+               <sequence name="Sequence1">
+                  <assign name="Assign2">
+                     <copy>
+                        <from>$numberOfFlights + 1</from>
+                        <to variable="numberOfFlights"/>
+                     </copy>
+                     <copy>
+                        <from>$AddFlightIn.AddFlightRequest/ns1:BookingNumber</from>
+                        <to>$flightBookingArray/ns1:FlightBooking[$numberOfFlights + 1]/bookingNumber
+                           <sxed:editor>
+                              <sxed:predicate path="$flightBookingArray/ns1:FlightBooking[$numberOfFlights + 1]" source="to"/>
+                           </sxed:editor>
+                        </to>
+                     </copy>
+                     <copy>
+                        <from>'Unconfirmed'</from>
+                        <to>$flightBookingArray/ns1:FlightBooking[$numberOfFlights + 1]/bookingStatus
+                           <sxed:editor>
+                              <sxed:predicate path="$flightBookingArray/ns1:FlightBooking[$numberOfFlights + 1]" source="to"/>
+                           </sxed:editor>
+                        </to>
+                     </copy>
+                     <copy>
+                        <from>true()</from>
+                        <to variable="AddFlightOut" part="AddFlightResponse"/>
+                     </copy>
+                     <copy>
+                        <from>$AddFlightIn.AddFlightRequest/ns1:Price</from>
+                        <to>$flightBookingArray/ns1:FlightBooking[$numberOfFlights + 1]/ns1:Price
+                           <sxed:editor>
+                              <sxed:predicate path="$flightBookingArray/ns1:FlightBooking[$numberOfFlights + 1]" source="to"/>
+                           </sxed:editor>
+                        </to>
+                     </copy>
+                  </assign>
+                  <reply name="Reply1" partnerLink="PartnerLink1" operation="AddFlight" portType="ns1:TravelGoodPortType" variable="AddFlightOut"/>
+               </sequence>
+            </onMessage>
+            <onMessage partnerLink="PartnerLink1" operation="GetItinerary" portType="ns1:TravelGoodPortType" variable="GetItineraryIn">
+               <correlations>
+                  <correlation set="ItineraryCorrelationSet" initiate="no"/>
+               </correlations>
+               <sequence name="Sequence2">
+                  <assign name="Assign3">
+                     <copy>
+                        <from variable="flightBookingArray"/>
+                        <to variable="GetItineraryOut" part="GetItineraryResponse"/>
+                     </copy>
+                  </assign>
+                  <reply name="Reply2" partnerLink="PartnerLink1" operation="GetItinerary" portType="ns1:TravelGoodPortType" variable="GetItineraryOut"/>
                </sequence>
             </onMessage>
          </pick>
