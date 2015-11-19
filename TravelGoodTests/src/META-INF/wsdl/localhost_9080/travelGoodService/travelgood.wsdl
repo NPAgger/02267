@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:ns0="http://lameducktypes" xmlns:plnk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://travelgood.ws" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="TravelGood" targetNamespace="http://travelgood.ws">
   <types>
-    <xsd:schema targetNamespace="http://travelgood.ws">
+    <xsd:schema xmlns:ns1="http://types.fastmoney.imm.dtu.dk" targetNamespace="http://travelgood.ws">
             <xsd:import namespace="http://lameducktypes" schemaLocation="http://localhost:8080/LameDuck/lameduckService?xsd=1"/>
+            <xsd:import namespace="http://types.fastmoney.imm.dtu.dk" schemaLocation="http://fastmoney.imm.dtu.dk:8080/BankServiceTypes.xsd"/>
             <xsd:complexType name="createItineraryRequestType">
                 <xsd:sequence>
                     <xsd:element ref="tns:CustomerName"/>
@@ -17,6 +18,7 @@
                 <xsd:sequence>
                     <xsd:element ref="tns:CustomerName"/>
                     <xsd:element ref="tns:ItineraryId"/>
+                    <xsd:element ref="tns:CreditCardInfo"/>
                 </xsd:sequence>
             </xsd:complexType>
             <xsd:element name="BookItineraryRequest" type="tns:bookItineraryRequestType"/>
@@ -24,6 +26,7 @@
             <xsd:complexType name="bookItineraryFaultType">
                 <xsd:sequence>
                     <xsd:element ref="tns:Message"/>
+                    <xsd:element ref="tns:flightBookingArray"/>
                 </xsd:sequence>
             </xsd:complexType>
             <xsd:element name="BookItineraryFault" type="tns:bookItineraryFaultType"/>
@@ -41,6 +44,39 @@
                 </xsd:sequence>
             </xsd:complexType>
             <xsd:element name="GetFlightsRequest" type="tns:getFlightsRequestType"/>
+            <xsd:complexType name="flightBookingType">
+                <xsd:sequence>
+                    <xsd:element name="bookingNumber" type="xsd:int"/>
+                    <xsd:element name="bookingStatus" type="xsd:string"/>
+                    <xsd:element ref="tns:Price"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:element name="FlightBooking" type="tns:flightBookingType"/>
+            <xsd:complexType name="flightBookingArrayType">
+                <xsd:sequence>
+                    <xsd:element maxOccurs="unbounded" minOccurs="0" ref="tns:FlightBooking"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:element name="flightBookingArray" type="tns:flightBookingArrayType"/>
+            <xsd:complexType name="addFlightRequestType">
+                <xsd:sequence>
+                    <xsd:element ref="tns:CustomerName"/>
+                    <xsd:element ref="tns:ItineraryId"/>
+                    <xsd:element ref="tns:BookingNumber"/>
+                    <xsd:element ref="tns:Price"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:element name="BookingNumber" type="xsd:int"/>
+            <xsd:element name="AddFlightRequest" type="tns:addFlightRequestType"/>
+            <xsd:complexType name="defaultRequestType">
+                <xsd:sequence>
+                    <xsd:element ref="tns:CustomerName"/>
+                    <xsd:element ref="tns:ItineraryId"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:element name="DefaultRequest" type="tns:defaultRequestType"/>
+            <xsd:element name="Price" type="xsd:int"/>
+            <xsd:element name="CreditCardInfo" type="ns1:creditCardInfoType"/>
         </xsd:schema>
   </types>
   <message name="CreateItineraryResponse">
@@ -63,12 +99,28 @@
     <part element="tns:GetFlightsRequest" name="GetFlightsRequest">
     </part>
   </message>
+  <message name="GetItineraryResponse">
+    <part element="tns:flightBookingArray" name="GetItineraryResponse">
+    </part>
+  </message>
+  <message name="GetItineraryRequest">
+    <part element="tns:DefaultRequest" name="GetItineraryRequest">
+    </part>
+  </message>
   <message name="BookItineraryFault">
     <part element="tns:BookItineraryFault" name="BookItineraryFault">
     </part>
   </message>
+  <message name="AddFlightResponse">
+    <part element="tns:Status" name="AddFlightResponse">
+    </part>
+  </message>
   <message name="GetFlightsResponse">
     <part element="ns0:listOfFlights" name="GetFlightsResponse">
+    </part>
+  </message>
+  <message name="AddFlightRequest">
+    <part element="tns:AddFlightRequest" name="AddFlightRequest">
     </part>
   </message>
   <portType name="TravelGoodPortType">
@@ -91,6 +143,18 @@
     </output>
       <fault message="tns:BookItineraryFault" name="fault1">
     </fault>
+    </operation>
+    <operation name="AddFlight">
+      <input message="tns:AddFlightRequest" name="input4">
+    </input>
+      <output message="tns:AddFlightResponse" name="output4">
+    </output>
+    </operation>
+    <operation name="GetItinerary">
+      <input message="tns:GetItineraryRequest" name="input5">
+    </input>
+      <output message="tns:GetItineraryResponse" name="output5">
+    </output>
     </operation>
   </portType>
   <binding name="TravelGoodPortTypeBinding" type="tns:TravelGoodPortType">
@@ -125,10 +189,26 @@
         <soap:fault name="fault1" use="literal"/>
       </fault>
     </operation>
+    <operation name="AddFlight">
+      <input name="input4">
+        <soap:body/>
+      </input>
+      <output name="output4">
+        <soap:body/>
+      </output>
+    </operation>
+    <operation name="GetItinerary">
+      <input name="input5">
+        <soap:body/>
+      </input>
+      <output name="output5">
+        <soap:body/>
+      </output>
+    </operation>
   </binding>
   <service name="TravelGoodService">
     <port binding="tns:TravelGoodPortTypeBinding" name="TravelGoodBindingPort">
-      <soap:address location="http://10.16.129.15:8070/travelGoodService"/>
+      <soap:address location="http://10.16.132.184:8070/travelGoodService"/>
     </port>
   </service>
     <plnk:partnerLinkType name="TravelGood">
@@ -155,6 +235,18 @@ A partner link type characterizes the conversational relationship between two se
         <vprop:query>tns:CustomerName</vprop:query>
     </vprop:propertyAlias>
     <vprop:propertyAlias messageType="tns:GetFlightsRequest" part="GetFlightsRequest" propertyName="tns:ItineraryId">
+        <vprop:query>tns:ItineraryId</vprop:query>
+    </vprop:propertyAlias>
+    <vprop:propertyAlias messageType="tns:AddFlightRequest" part="AddFlightRequest" propertyName="tns:CustomerName">
+        <vprop:query>tns:CustomerName</vprop:query>
+    </vprop:propertyAlias>
+    <vprop:propertyAlias messageType="tns:AddFlightRequest" part="AddFlightRequest" propertyName="tns:ItineraryId">
+        <vprop:query>tns:ItineraryId</vprop:query>
+    </vprop:propertyAlias>
+    <vprop:propertyAlias messageType="tns:GetItineraryRequest" part="GetItineraryRequest" propertyName="tns:CustomerName">
+        <vprop:query>tns:CustomerName</vprop:query>
+    </vprop:propertyAlias>
+    <vprop:propertyAlias messageType="tns:GetItineraryRequest" part="GetItineraryRequest" propertyName="tns:ItineraryId">
         <vprop:query>tns:ItineraryId</vprop:query>
     </vprop:propertyAlias>
 </definitions>

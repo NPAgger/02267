@@ -50,8 +50,8 @@ public class TravelGoodJUnitTests {
      @Test
      public void P1() throws DatatypeConfigurationException {
          CreateItineraryRequestType create = new CreateItineraryRequestType();
-         create.setCustomerName("Andri");
-         create.setItineraryId(1);
+         create.setCustomerName("Thomas");
+         create.setItineraryId(2);
          
          GetFlightsRequestType getFlights = new GetFlightsRequestType();
          getFlights.setCustomerName(create.getCustomerName());
@@ -73,6 +73,28 @@ public class TravelGoodJUnitTests {
          
          assertTrue(createItinerary(create));
          ListOfFlights list = getFlights(getFlights);
+         
+         AddFlightRequestType addFlight1 = new AddFlightRequestType();
+         addFlight1.setCustomerName(create.getCustomerName());
+         addFlight1.setItineraryId(create.getItineraryId());
+         addFlight1.setBookingNumber(list.getFlightInfo().get(0).getBookingNumber());
+         
+         AddFlightRequestType addFlight2 = new AddFlightRequestType();
+         addFlight2.setCustomerName(create.getCustomerName());
+         addFlight2.setItineraryId(create.getItineraryId());
+         addFlight2.setBookingNumber(20);
+         
+         
+         
+         DefaultRequestType getIt = new DefaultRequestType();
+         getIt.setCustomerName(create.getCustomerName());
+         getIt.setItineraryId(create.getItineraryId());
+         
+         boolean status1 = addFlight(addFlight1);
+         boolean status2 = addFlight(addFlight2);
+         
+         FlightBookingArrayType fbat = getItinerary(getIt);
+         
         try {
             assertTrue(bookItinerary(book));
         } catch (BookItineraryFault ex) {
@@ -81,11 +103,7 @@ public class TravelGoodJUnitTests {
          
      }
 
-    private static boolean bookItinerary(ws.travelgood.BookItineraryRequestType bookItineraryRequest) throws BookItineraryFault {
-        ws.travelgood.TravelGoodService service = new ws.travelgood.TravelGoodService();
-        ws.travelgood.TravelGoodPortType port = service.getTravelGoodBindingPort();
-        return port.bookItinerary(bookItineraryRequest);
-    }
+    
 
     private static boolean createItinerary(ws.travelgood.CreateItineraryRequestType createItineraryRequest) {
         ws.travelgood.TravelGoodService service = new ws.travelgood.TravelGoodService();
@@ -98,4 +116,24 @@ public class TravelGoodJUnitTests {
         ws.travelgood.TravelGoodPortType port = service.getTravelGoodBindingPort();
         return port.getFlights(getFlightsRequest);
     }
+
+
+    private static FlightBookingArrayType getItinerary(ws.travelgood.DefaultRequestType request) {
+        ws.travelgood.TravelGoodService service = new ws.travelgood.TravelGoodService();
+        ws.travelgood.TravelGoodPortType port = service.getTravelGoodBindingPort();
+        return port.getItinerary(request);
+    }
+
+    private static boolean addFlight(ws.travelgood.AddFlightRequestType request) {
+        ws.travelgood.TravelGoodService service = new ws.travelgood.TravelGoodService();
+        ws.travelgood.TravelGoodPortType port = service.getTravelGoodBindingPort();
+        return port.addFlight(request);
+    }
+
+    private static boolean bookItinerary(ws.travelgood.BookItineraryRequestType bookItineraryRequest) throws BookItineraryFault {
+        ws.travelgood.TravelGoodService service = new ws.travelgood.TravelGoodService();
+        ws.travelgood.TravelGoodPortType port = service.getTravelGoodBindingPort();
+        return port.bookItinerary(bookItineraryRequest);
+    }
+    
 }
