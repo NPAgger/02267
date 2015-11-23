@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" prefer="system">
+    <system systemId="http://localhost:8080/NiceView/NiceViewWSDLPortTypeService?wsdl" uri="wsdl/localhost_8080/NiceView/NiceViewWSDLPortTypeService.wsdl"/>
+    <system systemId="http://localhost:8080/NiceView/NiceViewWSDLPortTypeService?wsdl=1" uri="wsdl/localhost_8080/NiceView/NiceViewWSDLPortTypeService.wsdl_1.wsdl"/>
+    <system systemId="http://craptop:8080/NiceView/NiceViewWSDLPortTypeService?wsdl" uri="wsdl/craptop_8080/NiceView/NiceViewWSDLPortTypeService.wsdl"/>
+    <system systemId="http://craptop:8080/NiceView/NiceViewWSDLPortTypeService?wsdl=1" uri="wsdl/craptop_8080/NiceView/NiceViewWSDLPortTypeService.wsdl_1.wsdl"/>
+    <system systemId="http://fastmoney.imm.dtu.dk:8080/BankServiceTypes.xsd" uri="wsdl/fastmoney.imm.dtu.dk_8080/BankServiceTypes.xsd"/>
+    <system systemId="http://craptop:8080/NiceView/NiceViewService?wsdl" uri="wsdl/craptop_8080/NiceView/NiceViewService.wsdl"/>
+</catalog>
