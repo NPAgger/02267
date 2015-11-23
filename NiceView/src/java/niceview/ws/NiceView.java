@@ -18,8 +18,8 @@ import ws.niceview.*;
  *
  * @author Nis
  */
-@WebService(serviceName = "NiceViewWSDLPortTypeService", portName = "NiceViewWSDLPortTypePort", endpointInterface = "ws.niceview.NiceViewWSDLPortType", targetNamespace = "http://niceview.ws", wsdlLocation = "WEB-INF/wsdl/NiceViewService/NiceViewWSDLWrapper.wsdl")
-public class NiceViewService {
+@WebService(serviceName = "NiceViewService", portName = "NiceViewWSDLPortTypeBindingPort", endpointInterface = "ws.niceview.NiceViewWSDLPortType", targetNamespace = "http://niceview.ws", wsdlLocation = "WEB-INF/wsdl/NiceView/NiceViewWSDL.wsdl")
+public class NiceView {
     @WebServiceRef(wsdlLocation = "WEB-INF/wsdl/fastmoney.imm.dtu.dk_8080/BankService.wsdl")
     private BankService service;
     

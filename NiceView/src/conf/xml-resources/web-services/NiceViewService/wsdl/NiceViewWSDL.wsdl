@@ -164,4 +164,9 @@
             </fault>
         </operation>
     </binding>
+    <service name="NiceViewService">
+        <port name="NiceViewWSDLPortTypeBindingPort" binding="tns:NiceViewWSDLPortTypeBinding">
+            <soap:address location="http://localhost:${HttpDefaultPort}/NiceViewService"/>
+        </port>
+    </service>
 </definitions>
