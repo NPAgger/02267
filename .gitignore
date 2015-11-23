@@ -1,12 +1,14 @@
-/TravelGoodBPEL/nbproject/private/
-/TravelGoodREST/nbproject/private/
-/LameDuck/nbproject/private/
 /TravelGoodBPEL/nbproject/private
 /TravelGoodREST/nbproject/private
-/LameDuckTestTest/nbproject/private/
-/LameDuckTestTest/build/
 /TravelGoodApp/nbproject/private/
 /TravelGoodBPEL/build/
+/TravelGoodApp/build/
+/TravelGoodApp/src/jbiServiceUnits/
+/TravelGoodApp/dist/
+/TravelGoodApp/test/results/
+/LameDuck/nbproject/private/
+/LameDuckTestTest/nbproject/private/
+/LameDuckTestTest/build/
 /LameDuck/dist/
 /LameDuck/build/
 /LameDuck/web/
@@ -15,3 +17,5 @@
 /LameDuckReboot/nbproject/private/
 /LameDuckReboot/build/
 /LameDuckReboot/dist/
+/bpeltest/nbproject/private/
+/bpeltest/build/
