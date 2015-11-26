@@ -5,7 +5,7 @@
     xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
     xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
     xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="niceviewServiceWrapper" targetNamespace="http://enterprise.netbeans.org/bpel/niceviewServiceWrapper" xmlns:tns="http://enterprise.netbeans.org/bpel/niceviewServiceWrapper" xmlns:plnk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:ns="http://niceview.ws">
-    <import location="http://localhost:8080/NiceView/niceviewService?wsdl" namespace="http://niceview.ws"/>
+    <import location="http://localhost:8080/NiceView/NiceViewService?wsdl" namespace="http://niceview.ws"/>
     <plnk:partnerLinkType name="NiceViewWSDLLinkType">
         <plnk:role name="NiceViewWSDLRole" portType="ns:NiceViewWSDLPortType"/>
     </plnk:partnerLinkType>
