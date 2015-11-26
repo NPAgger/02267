@@ -18,15 +18,26 @@ public class Itiniery {
     private List<Integer> flights;
     private int id;
     
+    private String status;
+    
     public Itiniery(int id) {
         this.id = id;
+        this.status = "Open";
         
-        hotels = new ArrayList();
-        flights = new ArrayList();
+        this.hotels = new ArrayList();
+        this.flights = new ArrayList();
     }
     
     public int getId() {
         return this.id;
+    }
+    
+    public String getStatus() {
+        return this.status;
+    }
+    
+    public void setStatus(String s) {
+        this.status = s;
     }
     
     public List<Integer> getHotels() {
