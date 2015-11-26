@@ -3,4 +3,5 @@
     <system systemId="http://localhost:9080/travelGoodService/travelgood?wsdl" uri="xml-resources/web-service-references/travelgood/wsdl/localhost_9080/travelGoodService/travelgood.wsdl"/>
     <system systemId="http://localhost:8080/LameDuck/lameduckService?xsd=1" uri="xml-resources/web-service-references/travelgood/wsdl/localhost_8080/LameDuck/lameduckService.xsd_1.xsd"/>
     <system systemId="http://fastmoney.imm.dtu.dk:8080/BankServiceTypes.xsd" uri="xml-resources/web-service-references/travelgood/wsdl/fastmoney.imm.dtu.dk_8080/BankServiceTypes.xsd"/>
+    <system systemId="http://localhost:8080/NiceView/niceviewService?xsd=1" uri="xml-resources/web-service-references/travelgood/wsdl/localhost_8080/NiceView/niceviewService.xsd_1.xsd"/>
 </catalog>
