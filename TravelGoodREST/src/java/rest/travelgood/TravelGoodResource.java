@@ -19,8 +19,12 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
+import ld.ws.BookFlightFault_Exception;
+import ld.ws.CancelFlightFault_Exception;
+import ld.ws.ListOfFlights;
 
 import nv.ws.*;
+import ld.ws.*;
 
 /**
  * REST Web Service
@@ -107,15 +111,18 @@ public class TravelGoodResource {
     public void bookItin(@PathParam("id") int id, @PathParam("name") String name, 
             @PathParam("number") String number, @PathParam("month") int month, 
             @PathParam("year") int year) {
-        
-        CreditCardInfoType cc = new CreditCardInfoType();
-        cc.getExpirationDate().setMonth(month);
-        cc.getExpirationDate().setYear(year);
-        cc.setName(name);
-        cc.setNumber(number);
-        
+                
         BookRequest br = new BookRequest();
-        br.setCreditCardInfo(cc);
+        br.getCreditCardInfo().getExpirationDate().setMonth(month);
+        br.getCreditCardInfo().getExpirationDate().setMonth(year);
+        br.getCreditCardInfo().setName(name);
+        br.getCreditCardInfo().setNumber(number);
+        
+        RequestbookFlight rbf = new RequestbookFlight();
+        rbf.getCreditCardInfo().getExpirationDate().setMonth(month);
+        rbf.getCreditCardInfo().getExpirationDate().setMonth(year);
+        rbf.getCreditCardInfo().setName(name);
+        rbf.getCreditCardInfo().setNumber(number);
         
         for (Itiniery itin : running) {
             if (itin.getId() == id) {
@@ -126,12 +133,24 @@ public class TravelGoodResource {
                     } catch (Exception e) {
                     }
                 }
+                for (int i : itin.getFlights()) {
+                    rbf.setBookingNumber(i);
+                    try {
+                        bookFlight(rbf);
+                    } catch (Exception e) {
+                    }
+                }
                 running.remove(itin);
                 booked.add(itin);
                 break;
             }
         }
     }
+    
+    
+    /* 
+        Below are Web Service Reference methods to NiceView and LameDuck
+    */
     
     private static GetResponse getHotels_1(nv.ws.GetRequest input) {
         nv.ws.NiceViewService service = new nv.ws.NiceViewService();
@@ -144,4 +163,30 @@ public class TravelGoodResource {
         nv.ws.NiceViewWSDLPortType port = service.getNiceViewWSDLPortTypeBindingPort();
         return port.bookHotel(input);
     }
+
+    private static CancelResponse cancelHotel(nv.ws.CancelRequest input) throws CancelFault_Exception {
+        nv.ws.NiceViewService service = new nv.ws.NiceViewService();
+        nv.ws.NiceViewWSDLPortType port = service.getNiceViewWSDLPortTypeBindingPort();
+        return port.cancelHotel(input);
+    }
+
+    private static ListOfFlights getFlights(ld.ws.Request input) {
+        ld.ws.LameduckService service = new ld.ws.LameduckService();
+        ld.ws.LameduckPortType port = service.getLameduckPortTypeBindingPort();
+        return port.getFlights(input);
+    }
+
+    private static boolean bookFlight(ld.ws.RequestbookFlight input) throws BookFlightFault_Exception {
+        ld.ws.LameduckService service = new ld.ws.LameduckService();
+        ld.ws.LameduckPortType port = service.getLameduckPortTypeBindingPort();
+        return port.bookFlight(input);
+    }
+
+    private static boolean cancelFlight(ld.ws.RequestcancelFlight input) throws CancelFlightFault_Exception {
+        ld.ws.LameduckService service = new ld.ws.LameduckService();
+        ld.ws.LameduckPortType port = service.getLameduckPortTypeBindingPort();
+        return port.cancelFlight(input);
+    }
+    
+    
 }
