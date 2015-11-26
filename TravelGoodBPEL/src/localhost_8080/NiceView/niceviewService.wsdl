@@ -1,0 +1,169 @@
+<?xml version='1.0' encoding='UTF-8'?><!-- Published by JAX-WS RI (http://jax-ws.java.net). RI's version is Metro/2.3.1-b419 (branches/2.3.1.x-7937; 2014-08-04T08:11:03+0000) JAXWS-RI/2.2.10-b140803.1500 JAXWS-API/2.2.11 JAXB-RI/2.2.10-b140802.1033 JAXB-API/2.2.12-b140109.1041 svn-revision#unknown. --><definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://niceview.ws" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns0="http://types.fastmoney.imm.dtu.dk" xmlns:ns1="http://niceviewtypes" name="NiceViewWSDL" targetNamespace="http://niceview.ws">
+    <types>
+                <xsd:schema>
+            
+                        <xsd:import namespace="http://niceviewtypes" schemaLocation="http://localhost:8080/NiceView/niceviewService?xsd=1"/>
+                </xsd:schema>
+        <!--<xsd:schema targetNamespace="http://niceview.ws" xmlns:tns="http://niceview.ws">
+            <xsd:import namespace="http://types.fastmoney.imm.dtu.dk" 
+                        schemaLocation="http://fastmoney.imm.dtu.dk:8080/BankServiceTypes.xsd"/>
+            <xsd:complexType name="hotel">
+                <xsd:sequence>
+                    <xsd:element name="name" type="xsd:string"></xsd:element>
+                    <xsd:element name="city" type="xsd:string"></xsd:element>
+                    <xsd:element name="address" type="xsd:string"></xsd:element>
+                    <xsd:element name="price_pr_n" type="xsd:int"></xsd:element>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="hotelInfo">
+                <xsd:sequence>
+                    <xsd:element name="book_num" type="xsd:int"></xsd:element>
+                    <xsd:element name="price" type="xsd:int"></xsd:element>
+                    <xsd:element name="credit" type="xsd:boolean"></xsd:element>
+                    <xsd:element name="service" type="xsd:string"></xsd:element>
+                    <xsd:element name="hotel" type="tns:hotel"></xsd:element>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:element name="getRequest">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="city" type="xsd:string"></xsd:element>
+                        <xsd:element name="arr" type="xsd:dateTime"></xsd:element>
+                        <xsd:element name="dep" type="xsd:dateTime"></xsd:element>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="getResponse">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="hotelList" type="tns:hotelInfo" minOccurs="0" maxOccurs="unbounded"></xsd:element>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="bookRequest">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="book_num" type="xsd:int"></xsd:element>
+                        <xsd:element name="creditCardInfo" type="ns0:creditCardInfoType"></xsd:element>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="bookResponse">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="output" type="xsd:boolean"></xsd:element>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="bookHotelFault">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="message" type="xsd:string"></xsd:element>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="cancelRequest">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="book_num" type="xsd:int"></xsd:element>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="cancelResponse">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="output" type="xsd:boolean"></xsd:element>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="cancelFault">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="message" type="xsd:string"></xsd:element>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:schema>-->
+    </types>
+    <message name="getHotelsRequest">
+        <part name="input" element="ns1:getRequest"/>
+    </message>
+    <message name="getHotelsResponse">
+        <part name="output" element="ns1:getResponse"/>
+    </message>
+    <message name="bookHotelRequest">
+        <part name="input" element="ns1:bookRequest"/>
+    </message>
+    <message name="bookHotelResponse">
+        <part name="output" element="ns1:bookResponse"/>
+    </message>
+    <message name="bookFault">
+        <part name="fault" element="ns1:bookHotelFault"/>
+    </message>
+    <message name="cancelHotelRequest">
+        <part name="input" element="ns1:cancelRequest"/>
+    </message>
+    <message name="cancelHotelResponse">
+        <part name="output" element="ns1:cancelResponse"/>
+    </message>
+    <message name="cancelFault">
+        <part name="fault" element="ns1:cancelFault"/>
+    </message>
+    <portType name="NiceViewWSDLPortType">
+        <operation name="getHotels">
+            <input name="getInput" message="tns:getHotelsRequest"/>
+            <output name="getOutput" message="tns:getHotelsResponse"/>
+        </operation>
+        <operation name="bookHotel">
+            <input name="bookInput" message="tns:bookHotelRequest"/>
+            <output name="bookOutput" message="tns:bookHotelResponse"/>
+            <fault name="bookFault" message="tns:bookFault"/>
+        </operation>
+        <operation name="cancelHotel">
+            <input name="cancelInput" message="tns:cancelHotelRequest"/>
+            <output name="cancelOutput" message="tns:cancelHotelResponse"/>
+            <fault name="cancelFault" message="tns:cancelFault"/>
+        </operation>
+    </portType>
+    <binding name="NiceViewWSDLPortTypeBinding" type="tns:NiceViewWSDLPortType">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="getHotels">
+            <soap:operation/>
+            <input name="getInput">
+                <soap:body/>
+            </input>
+            <output name="getOutput">
+                <soap:body/>
+            </output>
+        </operation>
+        <operation name="bookHotel">
+            <soap:operation/>
+            <input name="bookInput">
+                <soap:body/>
+            </input>
+            <output name="bookOutput">
+                <soap:body/>
+            </output>
+            <fault name="bookFault">
+                <soap:fault name="bookFault"/>
+            </fault>
+        </operation>
+        <operation name="cancelHotel">
+            <soap:operation/>
+            <input name="cancelInput">
+                <soap:body/>
+            </input>
+            <output name="cancelOutput">
+                <soap:body/>
+            </output>
+            <fault name="cancelFault">
+                <soap:fault name="cancelFault"/>
+            </fault>
+        </operation>
+    </binding>
+    <service name="niceviewService">
+        <port name="NiceViewWSDLBindingPort" binding="tns:NiceViewWSDLPortTypeBinding">
+            <soap:address location="http://localhost:8080/NiceView/niceviewService"/>
+        </port>
+    </service>
+</definitions>
