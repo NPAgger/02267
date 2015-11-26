@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import ws.niceview.*;
+import niceviewtypes.*;
 
 /**
  *
@@ -109,7 +110,7 @@ public class NiceView {
         return output;
     }
     
-    public boolean cancelHotel(CancelRequest input) throws CancelFault_Exception {
+    public boolean cancelHotel(CancelRequest input) throws ws.niceview.CancelFault {
         boolean output = false;
         
         if (bookedHotels.contains(input.getBookNum())) {
@@ -117,9 +118,9 @@ public class NiceView {
             output = true;
         } else {
             String message = "";
-            CancelFault cf = new CancelFault();
+            niceviewtypes.CancelFault cf = new niceviewtypes.CancelFault();
             cf.setMessage(message);
-            CancelFault_Exception ex = new CancelFault_Exception(message, cf);
+            ws.niceview.CancelFault ex = new ws.niceview.CancelFault(message, cf);
             throw ex;
         }
         

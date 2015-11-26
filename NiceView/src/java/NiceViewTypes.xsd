@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            targetNamespace="http://niceviewtypes"
+    xmlns:tns="http://niceviewtypes"
+xmlns:ns0="http://types.fastmoney.imm.dtu.dk">
+    <xsd:import namespace="http://types.fastmoney.imm.dtu.dk" schemaLocation="http://fastmoney.imm.dtu.dk:8080/BankServiceTypes.xsd"/>
+            <xsd:complexType name="hotel">
+                <xsd:sequence>
+                    <xsd:element name="name" type="xsd:string"></xsd:element>
+                    <xsd:element name="city" type="xsd:string"></xsd:element>
+                    <xsd:element name="address" type="xsd:string"></xsd:element>
+                    <xsd:element name="price_pr_n" type="xsd:int"></xsd:element>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="hotelInfo">
+                <xsd:sequence>
+                    <xsd:element name="book_num" type="xsd:int"></xsd:element>
+                    <xsd:element name="price" type="xsd:int"></xsd:element>
+                    <xsd:element name="credit" type="xsd:boolean"></xsd:element>
+                    <xsd:element name="service" type="xsd:string"></xsd:element>
+                    <xsd:element name="hotel" type="tns:hotel"></xsd:element>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:element name="getRequest">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="city" type="xsd:string"></xsd:element>
+                        <xsd:element name="arr" type="xsd:dateTime"></xsd:element>
+                        <xsd:element name="dep" type="xsd:dateTime"></xsd:element>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="getResponse">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="hotelList" type="tns:hotelInfo" minOccurs="0" maxOccurs="unbounded"></xsd:element>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="bookRequest">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="book_num" type="xsd:int"></xsd:element>
+                        <xsd:element name="creditCardInfo" type="ns0:creditCardInfoType"></xsd:element>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="bookResponse">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="output" type="xsd:boolean"></xsd:element>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="bookHotelFault">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="message" type="xsd:string"></xsd:element>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="cancelRequest">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="book_num" type="xsd:int"></xsd:element>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="cancelResponse">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="output" type="xsd:boolean"></xsd:element>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="cancelFault">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="message" type="xsd:string"></xsd:element>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+</xsd:schema>
