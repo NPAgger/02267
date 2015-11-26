@@ -30,6 +30,7 @@ public class ApplicationConfig extends Application {
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
         resources.add(rest.travelgood.GenericResource.class);
+        resources.add(rest.travelgood.NiceViewResource.class);
         resources.add(rest.travelgood.TravelGoodResource.class);
     }
     
