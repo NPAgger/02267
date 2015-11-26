@@ -21,36 +21,34 @@ import ws.nv.*;
  * @author Nis
  */
 
-@Path("TravelGood")
+@Path("/TravelGood")
 public class TravelGoodResource {
-    @WebServiceRef(wsdlLocation = "WEB-INF/wsdl/localhost_8080/NiceView/NiceViewService.wsdl")
-    private NiceViewService nvs;
     
+    @Path("/hotels")
     @GET
-    @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_XML)
-    public GetResponse getHotels(String in) throws Exception{
+    public GetResponse getHotels(@QueryParam("city") String city, 
+            @QueryParam("arrival") String arrival,
+            @QueryParam("departure") String departure) throws Exception{
         GetRequest input = new GetRequest();
         
-        //String in = "Copenhagen-01 01 2015-02 01 2015";
+        DatatypeFactory df = DatatypeFactory.newInstance();
         
-        String[] list = in.split("-");
+        DateFormat format = new SimpleDateFormat("dd-MM-yyyy");
         
-        DateFormat df = new SimpleDateFormat("dd MM yyyy");
-        Date arr = df.parse(list[1]);
-        Date dep = df.parse(list[2]);
+        GregorianCalendar temp = new GregorianCalendar();
         
-        GregorianCalendar arrival = new GregorianCalendar();
-        arrival.setTime(arr);
-        GregorianCalendar departure = new GregorianCalendar();
-        arrival.setTime(dep);
+        Date date = format.parse(arrival);
+        temp.setTime(date);
+        XMLGregorianCalendar arr = df.newXMLGregorianCalendar(temp);
         
-        XMLGregorianCalendar finalArr = DatatypeFactory.newInstance().newXMLGregorianCalendar(arrival);
-        XMLGregorianCalendar finalDep = DatatypeFactory.newInstance().newXMLGregorianCalendar(departure);
+        date = format.parse(departure);
+        temp.setTime(date);
+        XMLGregorianCalendar dep = df.newXMLGregorianCalendar(temp);
         
-        input.setCity(list[0]);
-        input.setArr(finalArr);
-        input.setDep(finalDep);
+        input.setCity(city);
+        input.setArr(arr);
+        input.setDep(dep);
         
         GetResponse output = getHotels_1(input);
         
