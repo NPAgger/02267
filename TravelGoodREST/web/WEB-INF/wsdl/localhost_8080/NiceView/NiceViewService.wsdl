@@ -158,7 +158,7 @@
     </binding>
     <service name="NiceViewService">
         <port name="NiceViewWSDLPortTypeBindingPort" binding="tns:NiceViewWSDLPortTypeBinding">
-            <soap:address location="http://craptop:8080/NiceView/NiceViewService"/>
+            <soap:address location="http://localhost:8080/NiceView/NiceViewService"/>
         </port>
     </service>
 </definitions>

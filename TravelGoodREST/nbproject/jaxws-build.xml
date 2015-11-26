@@ -28,8 +28,8 @@
     </target>
     <target name="wsimport-client-NiceViewService" depends="wsimport-init">
         <mkdir dir="${build.generated.dir}/jax-wsCache/NiceViewService"/>
-        <wsimport sourcedestdir="${build.generated.dir}/jax-wsCache/NiceViewService" destdir="${build.generated.dir}/jax-wsCache/NiceViewService" wsdl="${basedir}/${conf-dir}xml-resources/web-service-references/NiceViewService/wsdl/craptop_8080/NiceView/NiceViewService.wsdl" catalog="catalog.xml" encoding="${source.encoding}" extension="true" verbose="true" fork="false" wsdlLocation="http://craptop:8080/NiceView/NiceViewService?wsdl" xnocompile="true" xendorsed="true" package="ws.nv">
-            <depends file="${basedir}/${conf-dir}xml-resources/web-service-references/NiceViewService/wsdl/craptop_8080/NiceView/NiceViewService.wsdl"/>
+        <wsimport sourcedestdir="${build.generated.dir}/jax-wsCache/NiceViewService" destdir="${build.generated.dir}/jax-wsCache/NiceViewService" wsdl="${basedir}/${conf-dir}xml-resources/web-service-references/NiceViewService/wsdl/localhost_8080/NiceView/NiceViewService.wsdl" catalog="catalog.xml" encoding="${source.encoding}" extension="true" verbose="true" fork="false" wsdlLocation="http://localhost:8080/NiceView/NiceViewService?wsdl" xnocompile="true" xendorsed="true" package="nv.ws">
+            <depends file="${basedir}/${conf-dir}xml-resources/web-service-references/NiceViewService/wsdl/localhost_8080/NiceView/NiceViewService.wsdl"/>
             <produces dir="${build.generated.dir}/jax-wsCache/NiceViewService"/>
         </wsimport>
         <copy todir="${build.generated.sources.dir}/jax-ws">
@@ -39,7 +39,7 @@
         </copy>
     </target>
     <target name="wsimport-client-clean-NiceViewService" depends="-init-project">
-        <delete dir="${build.generated.sources.dir}/jax-ws/ws/nv"/>
+        <delete dir="${build.generated.sources.dir}/jax-ws/nv/ws"/>
         <delete dir="${build.generated.dir}/jax-wsCache/NiceViewService"/>
     </target>
     <target name="wsimport-client-generate" depends="wsimport-client-NiceViewService"/>

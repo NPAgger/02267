@@ -14,7 +14,7 @@ import javax.ws.rs.core.MediaType;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.ws.WebServiceRef;
-import ws.nv.*;
+import nv.ws.*;
 
 /**
  *
@@ -55,9 +55,9 @@ public class TravelGoodResource {
         return output;
     }
 
-    private static GetResponse getHotels_1(ws.nv.GetRequest input) {
-        ws.nv.NiceViewService service = new ws.nv.NiceViewService();
-        ws.nv.NiceViewWSDLPortType port = service.getNiceViewWSDLPortTypeBindingPort();
+    private static GetResponse getHotels_1(nv.ws.GetRequest input) {
+        nv.ws.NiceViewService service = new nv.ws.NiceViewService();
+        nv.ws.NiceViewWSDLPortType port = service.getNiceViewWSDLPortTypeBindingPort();
         return port.getHotels(input);
     }
     

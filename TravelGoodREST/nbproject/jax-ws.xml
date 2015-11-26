@@ -4,9 +4,9 @@
   </services>
   <clients>
     <client name="NiceViewService">
-      <wsdl-url>http://craptop:8080/NiceView/NiceViewService?wsdl</wsdl-url>
-      <local-wsdl-file>craptop_8080/NiceView/NiceViewService.wsdl</local-wsdl-file>
-      <package-name forceReplace="true">ws.nv</package-name>
+      <wsdl-url>http://localhost:8080/NiceView/NiceViewService?wsdl</wsdl-url>
+      <local-wsdl-file>localhost_8080/NiceView/NiceViewService.wsdl</local-wsdl-file>
+      <package-name forceReplace="true">nv.ws</package-name>
       <catalog-file>catalog.xml</catalog-file>
       <wsimport-options>
         <wsimport-option>
@@ -23,7 +23,7 @@
         </wsimport-option>
         <wsimport-option>
           <wsimport-option-name>wsdlLocation</wsimport-option-name>
-          <wsimport-option-value>http://craptop:8080/NiceView/NiceViewService?wsdl</wsimport-option-value>
+          <wsimport-option-value>http://localhost:8080/NiceView/NiceViewService?wsdl</wsimport-option-value>
         </wsimport-option>
         <wsimport-option>
           <wsimport-option-name>xnocompile</wsimport-option-name>
@@ -35,7 +35,7 @@
         </wsimport-option>
         <wsimport-option>
           <wsimport-option-name>package</wsimport-option-name>
-          <wsimport-option-value>ws.nv</wsimport-option-value>
+          <wsimport-option-value>nv.ws</wsimport-option-value>
         </wsimport-option>
       </wsimport-options>
     </client>
