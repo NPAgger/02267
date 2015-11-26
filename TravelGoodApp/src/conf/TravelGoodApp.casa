@@ -3,7 +3,7 @@
     <endpoints>
         <endpoint endpoint-name="lameduckPortTypeBindingPort" interface-name="ns1:lameduckPortType" name="endpoint1" service-name="ns1:lameduckService"/>
         <endpoint endpoint-name="TravelGoodBindingPort" interface-name="ns2:TravelGoodPortType" name="endpoint2" service-name="ns2:TravelGoodService"/>
-        <endpoint endpoint-name="NiceViewWSDLBindingPort" interface-name="ns3:NiceViewWSDLPortType" name="endpoint3" service-name="ns3:niceviewService"/>
+        <endpoint endpoint-name="NiceViewWSDLPortTypeBindingPort" interface-name="ns3:NiceViewWSDLPortType" name="endpoint3" service-name="ns3:NiceViewService"/>
         <endpoint display-name="PartnerLink1" endpoint-name="TravelGoodPortTypeRole_myRole" file-path="travelGoodBPEL.bpel" interface-name="ns2:TravelGoodPortType" name="endpoint4" process-name="travelGoodBPEL" service-name="ns4:PartnerLink1"/>
         <endpoint display-name="LameDuckPartnerLink" endpoint-name="lameduckRole_partnerRole" file-path="travelGoodBPEL.bpel" interface-name="ns1:lameduckPortType" name="endpoint5" process-name="travelGoodBPEL" service-name="ns4:LameDuckPartnerLink"/>
         <endpoint display-name="NiceViewPartnerLink" endpoint-name="NiceViewWSDLRole_partnerRole" file-path="travelGoodBPEL.bpel" interface-name="ns3:NiceViewWSDLPortType" name="endpoint6" process-name="travelGoodBPEL" service-name="ns4:NiceViewPartnerLink"/>
@@ -22,7 +22,7 @@
                     <provides endpoint="endpoint1"/>
                 </port>
                 <port x="68" y="39">
-                    <link xlink:href="../jbiServiceUnits/TravelGoodBPEL/localhost_8080/NiceView/niceviewService.wsdl#xpointer(/definitions/service[@name='niceviewService']/port[@name='NiceViewWSDLBindingPort'])" xlink:type="simple"/>
+                    <link xlink:href="../jbiServiceUnits/TravelGoodBPEL/localhost_8080/NiceView/niceviewService.wsdl#xpointer(/definitions/service[@name='NiceViewService']/port[@name='NiceViewWSDLPortTypeBindingPort'])" xlink:type="simple"/>
                     <consumes endpoint="endpoint3"/>
                     <provides endpoint="endpoint3"/>
                 </port>
@@ -51,7 +51,7 @@
     </bindings>
     <services>
         <link xlink:href="../jbiServiceUnits/TravelGoodBPEL/localhost_8080/LameDuck/lameduckService.wsdl#xpointer(/definitions/service[@name='lameduckService'])" xlink:type="simple"/>
-        <link xlink:href="../jbiServiceUnits/TravelGoodBPEL/localhost_8080/NiceView/niceviewService.wsdl#xpointer(/definitions/service[@name='niceviewService'])" xlink:type="simple"/>
+        <link xlink:href="../jbiServiceUnits/TravelGoodBPEL/localhost_8080/NiceView/niceviewService.wsdl#xpointer(/definitions/service[@name='NiceViewService'])" xlink:type="simple"/>
         <link xlink:href="../jbiServiceUnits/TravelGoodBPEL/TravelGood.wsdl#xpointer(/definitions/service[@name='TravelGoodService'])" xlink:type="simple"/>
     </services>
     <regions>
