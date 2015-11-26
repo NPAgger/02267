@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:schemaLocation="http://schemas.xmlsoap.org/soap/envelope/ http://schemas.xmlsoap.org/soap/envelope/">
+  <SOAP-ENV:Body>
+    <listOfFlights xmlns="http://lameducktypes" xmlns:S="http://schemas.xmlsoap.org/soap/envelope/" xmlns:msgns="http://lameduck.ws" xmlns:ns0="http://travelgood.ws" xmlns:ns2="http://lameducktypes">
+      <flightInfo xmlns="">
+        <airlineReservationService>Dohop</airlineReservationService>
+        <price>500</price>
+        <bookingNumber>1</bookingNumber>
+        <flight>
+          <origin>Iceland</origin>
+          <destination>China</destination>
+          <departure>2015-11-10T00:00:00</departure>
+          <arrival>2015-11-20T00:00:00</arrival>
+          <carrier>Boeing 747</carrier>
+        </flight>
+      </flightInfo>
+      <flightInfo xmlns="">
+        <airlineReservationService>Dohop</airlineReservationService>
+        <price>500</price>
+        <bookingNumber>2</bookingNumber>
+        <flight>
+          <origin>Iceland</origin>
+          <destination>China</destination>
+          <departure>2015-11-10T00:00:00</departure>
+          <arrival>2015-11-20T00:00:00</arrival>
+          <carrier>Boeing 747</carrier>
+        </flight>
+      </flightInfo>
+      <flightInfo xmlns="">
+        <airlineReservationService>Dohop</airlineReservationService>
+        <price>500</price>
+        <bookingNumber>3</bookingNumber>
+        <flight>
+          <origin>Iceland</origin>
+          <destination>China</destination>
+          <departure>2015-11-10T00:00:00</departure>
+          <arrival>2015-11-20T00:00:00</arrival>
+          <carrier>Boeing 747</carrier>
+        </flight>
+      </flightInfo>
+      <flightInfo xmlns="">
+        <airlineReservationService>Dohop</airlineReservationService>
+        <price>500</price>
+        <bookingNumber>4</bookingNumber>
+        <flight>
+          <origin>Iceland</origin>
+          <destination>China</destination>
+          <departure>2015-11-10T00:00:00</departure>
+          <arrival>2015-11-20T00:00:00</arrival>
+          <carrier>Boeing 747</carrier>
+        </flight>
+      </flightInfo>
+      <flightInfo xmlns="">
+        <airlineReservationService>Dohop</airlineReservationService>
+        <price>500</price>
+        <bookingNumber>5</bookingNumber>
+        <flight>
+          <origin>Iceland</origin>
+          <destination>China</destination>
+          <departure>2015-11-10T00:00:00</departure>
+          <arrival>2015-11-20T00:00:00</arrival>
+          <carrier>Boeing 747</carrier>
+        </flight>
+      </flightInfo>
+      <flightInfo xmlns="">
+        <airlineReservationService>Dohop</airlineReservationService>
+        <price>500</price>
+        <bookingNumber>6</bookingNumber>
+        <flight>
+          <origin>Iceland</origin>
+          <destination>China</destination>
+          <departure>2015-11-10T00:00:00</departure>
+          <arrival>2015-11-20T00:00:00</arrival>
+          <carrier>Boeing 747</carrier>
+        </flight>
+      </flightInfo>
+      <flightInfo xmlns="">
+        <airlineReservationService>Dohop</airlineReservationService>
+        <price>500</price>
+        <bookingNumber>7</bookingNumber>
+        <flight>
+          <origin>Iceland</origin>
+          <destination>China</destination>
+          <departure>2015-11-10T00:00:00</departure>
+          <arrival>2015-11-20T00:00:00</arrival>
+          <carrier>Boeing 747</carrier>
+        </flight>
+      </flightInfo>
+      <flightInfo xmlns="">
+        <airlineReservationService>Dohop</airlineReservationService>
+        <price>500</price>
+        <bookingNumber>8</bookingNumber>
+        <flight>
+          <origin>Iceland</origin>
+          <destination>China</destination>
+          <departure>2015-11-10T00:00:00</departure>
+          <arrival>2015-11-20T00:00:00</arrival>
+          <carrier>Boeing 747</carrier>
+        </flight>
+      </flightInfo>
+      <flightInfo xmlns="">
+        <airlineReservationService>Dohop</airlineReservationService>
+        <price>500</price>
+        <bookingNumber>9</bookingNumber>
+        <flight>
+          <origin>Iceland</origin>
+          <destination>China</destination>
+          <departure>2015-11-10T00:00:00</departure>
+          <arrival>2015-11-20T00:00:00</arrival>
+          <carrier>Boeing 747</carrier>
+        </flight>
+      </flightInfo>
+      <flightInfo xmlns="">
+        <airlineReservationService>Dohop</airlineReservationService>
+        <price>500</price>
+        <bookingNumber>10</bookingNumber>
+        <flight>
+          <origin>Iceland</origin>
+          <destination>China</destination>
+          <departure>2015-11-10T00:00:00</departure>
+          <arrival>2015-11-20T00:00:00</arrival>
+          <carrier>Boeing 747</carrier>
+        </flight>
+      </flightInfo>
+      <flightInfo xmlns="">
+        <airlineReservationService>Dohop</airlineReservationService>
+        <price>500</price>
+        <bookingNumber>11</bookingNumber>
+        <flight>
+          <origin>Iceland</origin>
+          <destination>China</destination>
+          <departure>2015-11-10T00:00:00</departure>
+          <arrival>2015-11-20T00:00:00</arrival>
+          <carrier>Boeing 747</carrier>
+        </flight>
+      </flightInfo>
+    </listOfFlights>
+  </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>

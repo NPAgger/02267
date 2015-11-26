@@ -1,0 +1,13 @@
+<soapenv:Envelope xsi:schemaLocation="http://schemas.xmlsoap.org/soap/envelope/ http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:trav="http://travelgood.ws" xmlns:lam="http://lameducktypes">
+  <soapenv:Body>
+    <trav:GetFlightsRequest>
+      <trav:CustomerName>Test</trav:CustomerName>
+      <trav:ItineraryId>42</trav:ItineraryId>
+      <lam:request>
+        <lam:date>2015-11-10T00:00:00</lam:date>
+        <lam:destination>China</lam:destination>
+        <lam:origin>Iceland</lam:origin>
+      </lam:request>
+    </trav:GetFlightsRequest>
+  </soapenv:Body>
+</soapenv:Envelope>
