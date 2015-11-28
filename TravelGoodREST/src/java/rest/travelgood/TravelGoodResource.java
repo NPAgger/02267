@@ -5,10 +5,10 @@
  */
 package rest.travelgood;
 
-import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -76,8 +76,8 @@ public class TravelGoodResource {
         return Response.ok().build();
     }
     
-    @Path("/book/{id}/{name}/{numer}/{month}/{year}")
-    @POST
+    @Path("/{id}/book/{name}/{numer}/{month}/{year}")
+    @PUT
     public void bookItin(@PathParam("id") int id, @PathParam("name") String name, 
             @PathParam("number") String number, @PathParam("month") int month, 
             @PathParam("year") int year) throws Exception{
@@ -113,6 +113,52 @@ public class TravelGoodResource {
         }
     }
     
+    @Path("/{id}/cancel/{name}/{numer}/{month}/{year}")
+    @PUT
+    public Response cancel(@PathParam("id") int id, @PathParam("name") String name, 
+            @PathParam("number") String number, @PathParam("month") int month, 
+            @PathParam("year") int year) throws Exception {
+        
+        OrderRepresentation temp = new OrderRepresentation(0);
+        
+        for (StatusRepresentation srep : statuses) {
+            if (srep.getId() == id) {
+                if (srep.getStatus().equals("Open")) {
+                    for (OrderRepresentation order : orders) {
+                        if (order.getId() == id) {
+                            temp = order;
+                            break;
+                        }
+                    }
+                }
+                break;
+            }
+        }
+        
+        if (temp.getId() != 0) {
+            ld.ws.CreditCardInfoType cc = new ld.ws.CreditCardInfoType();
+            cc.getExpirationDate().setMonth(month);
+            cc.getExpirationDate().setMonth(year);
+            cc.setName(name);
+            cc.setNumber(number);
+            
+            for (HotelInfo hi : temp.getHotels()) {
+                CancelRequest cancel = new CancelRequest();
+                cancel.setBookNum(hi.getBookNum());
+                NiceViewResource.cancel(cancel);
+            }
+            for (FlightInfo fi : temp.getFlights()) {
+                RequestcancelFlight cancel = new RequestcancelFlight();
+                cancel.setBookingNumber(fi.getBookingNumber());
+                cancel.setPrice(fi.getPrice());
+                cancel.setCreditCardInfo(cc);
+                LameDuckResource.cancel(cancel);
+            }
+            return Response.ok().build();
+        }
+        
+        return Response.status(Response.Status.NOT_FOUND).build();
+    }
     
     public static List<OrderRepresentation> getOrders() {
         return orders;

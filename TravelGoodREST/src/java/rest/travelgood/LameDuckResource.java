@@ -92,6 +92,10 @@ public class LameDuckResource {
         return bookFlight(input);
     }
     
+    public static boolean cancel(RequestcancelFlight input) throws CancelFlightFault_Exception {
+        return cancelFlight(input);
+    }
+    
     private static ListOfFlights getFlights(ld.ws.Request input) {
         ld.ws.LameduckService service = new ld.ws.LameduckService();
         ld.ws.LameduckPortType port = service.getLameduckPortTypeBindingPort();

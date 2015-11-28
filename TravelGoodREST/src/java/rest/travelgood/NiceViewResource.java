@@ -94,6 +94,10 @@ public class NiceViewResource {
         return bookHotel(info).isOutput();
     }
     
+    public static boolean cancel(CancelRequest input) throws CancelFault_Exception{
+        return cancelHotel(input).isOutput();
+    }
+    
     private static GetResponse getHotels(nv.ws.GetRequest input) {
         nv.ws.NiceViewService service = new nv.ws.NiceViewService();
         nv.ws.NiceViewWSDLPortType port = service.getNiceViewWSDLPortTypeBindingPort();
