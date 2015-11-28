@@ -7,6 +7,7 @@ package rest.travelgood;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -40,7 +41,7 @@ public class TravelGoodResource {
     @Path("/new")
     @GET
     public int newItin() {
-        int id = running.size() + 1;
+        int id = running.size() + booked.size() + 1;
         
         Itiniery itin = new Itiniery(id);
         
@@ -80,6 +81,34 @@ public class TravelGoodResource {
         return output;
     }
     
+    @Path("/flights")
+    @GET
+    @Produces(MediaType.APPLICATION_XML)
+    public ListOfFlights getFlights(@QueryParam("origin") String origin, 
+            @QueryParam("destination") String destination,
+            @QueryParam("date") String date) throws Exception{
+        
+        Request input = new Request();
+        
+        DatatypeFactory df = DatatypeFactory.newInstance();
+        
+        DateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+        
+        GregorianCalendar temp = new GregorianCalendar();
+        
+        Date d = format.parse(date);
+        temp.setTime(d);
+        XMLGregorianCalendar greg_date = df.newXMLGregorianCalendar(temp);
+        
+        input.setOrigin(origin);
+        input.setDestination(destination);
+        input.setDate(greg_date);
+        
+        ListOfFlights output = getFlights_1(input);
+        
+        return output;
+    }
+    
     @Path("/addhotel/{id}/{book_num}")
     @POST
     public void addHotel(@PathParam("id") int id, 
@@ -104,6 +133,46 @@ public class TravelGoodResource {
                 break;
             }
         }
+    }
+    
+    @Path("/{id}/get/status")
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public String getStatus(@PathParam("id") int id) {
+        for (Itiniery itin : running) {
+            if (itin.getId() == id) {
+                return itin.getStatus();
+            }
+        }
+        for (Itiniery itin : booked) {
+            if (itin.getId() == id) {
+                return itin.getStatus();
+            }
+        }
+        return "No itiniery with ID: " + id;
+    }
+    
+    @Path("/{id}/get/order")
+    @GET
+    public List<String> getOrder(@PathParam("id") int id) {
+        Itiniery main = new Itiniery(0);
+        
+        for (Itiniery itin : running) {
+            if (itin.getId() == id) {
+                main = itin;
+            }
+        }
+        if (main.getId() == 0) {
+            for (Itiniery itin : booked) {
+                if (itin.getId() == id) {
+                    main = itin;
+                }
+            }
+        }
+        
+        List<String> output = new ArrayList();
+        
+        return output;
     }
     
     @Path("/book/{id}/{name}/{numer}/{month}/{year}")
@@ -142,6 +211,7 @@ public class TravelGoodResource {
                 }
                 running.remove(itin);
                 booked.add(itin);
+                itin.setStatus("Closed");
                 break;
             }
         }
@@ -170,7 +240,7 @@ public class TravelGoodResource {
         return port.cancelHotel(input);
     }
 
-    private static ListOfFlights getFlights(ld.ws.Request input) {
+    private static ListOfFlights getFlights_1(ld.ws.Request input) {
         ld.ws.LameduckService service = new ld.ws.LameduckService();
         ld.ws.LameduckPortType port = service.getLameduckPortTypeBindingPort();
         return port.getFlights(input);
