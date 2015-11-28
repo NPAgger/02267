@@ -29,6 +29,8 @@ public class ApplicationConfig extends Application {
      * If required, comment out calling this method in getClasses().
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
+        resources.add(rest.travelgood.LameDuckResource.class);
+        resources.add(rest.travelgood.NiceViewResource.class);
         resources.add(rest.travelgood.TravelGoodResource.class);
     }
     

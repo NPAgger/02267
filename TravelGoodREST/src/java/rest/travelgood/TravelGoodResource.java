@@ -5,27 +5,21 @@
  */
 package rest.travelgood;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import javax.xml.datatype.DatatypeFactory;
-import javax.xml.datatype.XMLGregorianCalendar;
-import ld.ws.BookFlightFault_Exception;
-import ld.ws.CancelFlightFault_Exception;
-import ld.ws.ListOfFlights;
+import javax.ws.rs.core.UriInfo;
+import javax.ws.rs.core.Response;
 
 import nv.ws.*;
 import ld.ws.*;
+import rest.representations.*;
 
 /**
  * REST Web Service
@@ -35,151 +29,58 @@ import ld.ws.*;
 @Path("/TravelGood")
 public class TravelGoodResource {
 
-    List<Itiniery> running;
-    List<Itiniery> booked;
+    @Context
+    private UriInfo context;
+    
+    private static List<OrderRepresentation> orders;
+    
+    private static List<StatusRepresentation> statuses;
     
     @Path("/new")
-    @GET
+    @POST
     public int newItin() {
-        int id = running.size() + booked.size() + 1;
+        int id = statuses.size() + 1;
         
-        Itiniery itin = new Itiniery(id);
+        OrderRepresentation order = new OrderRepresentation(id);
+        StatusRepresentation status = new StatusRepresentation(id, "Open");
         
-        running.add(itin);
+        orders.add(order);
+        statuses.add(status);
         
         return id;
-    }
-    
-    @Path("/hotels")
-    @GET
-    @Produces(MediaType.APPLICATION_XML)
-    public GetResponse getHotels(@QueryParam("city") String city, 
-            @QueryParam("arrival") String arrival,
-            @QueryParam("departure") String departure) throws Exception{
-        GetRequest input = new GetRequest();
-        
-        DatatypeFactory df = DatatypeFactory.newInstance();
-        
-        DateFormat format = new SimpleDateFormat("dd-MM-yyyy");
-        
-        GregorianCalendar temp = new GregorianCalendar();
-        
-        Date date = format.parse(arrival);
-        temp.setTime(date);
-        XMLGregorianCalendar arr = df.newXMLGregorianCalendar(temp);
-        
-        date = format.parse(departure);
-        temp.setTime(date);
-        XMLGregorianCalendar dep = df.newXMLGregorianCalendar(temp);
-        
-        input.setCity(city);
-        input.setArr(arr);
-        input.setDep(dep);
-        
-        GetResponse output = getHotels_1(input);
-        
-        return output;
-    }
-    
-    @Path("/flights")
-    @GET
-    @Produces(MediaType.APPLICATION_XML)
-    public ListOfFlights getFlights(@QueryParam("origin") String origin, 
-            @QueryParam("destination") String destination,
-            @QueryParam("date") String date) throws Exception{
-        
-        Request input = new Request();
-        
-        DatatypeFactory df = DatatypeFactory.newInstance();
-        
-        DateFormat format = new SimpleDateFormat("dd-MM-yyyy");
-        
-        GregorianCalendar temp = new GregorianCalendar();
-        
-        Date d = format.parse(date);
-        temp.setTime(d);
-        XMLGregorianCalendar greg_date = df.newXMLGregorianCalendar(temp);
-        
-        input.setOrigin(origin);
-        input.setDestination(destination);
-        input.setDate(greg_date);
-        
-        ListOfFlights output = getFlights_1(input);
-        
-        return output;
-    }
-    
-    @Path("/addhotel/{id}/{book_num}")
-    @POST
-    public void addHotel(@PathParam("id") int id, 
-            @PathParam("book_num") int book_num) {
-        
-        for (Itiniery itin : running) {
-            if (itin.getId() == id) {
-                itin.addHotel(book_num);
-                break;
-            }
-        }
-    }
-    
-    @Path("/addflight/{id}/{book_num}")
-    @POST
-    public void addFlight(@PathParam("id") int id, 
-            @PathParam("book_num") int book_num) {
-        
-        for (Itiniery itin : running) {
-            if (itin.getId() == id) {
-                itin.addFlight(book_num);
-                break;
-            }
-        }
     }
     
     @Path("/{id}/get/status")
     @GET
     @Produces(MediaType.TEXT_PLAIN)
-    public String getStatus(@PathParam("id") int id) {
-        for (Itiniery itin : running) {
-            if (itin.getId() == id) {
-                return itin.getStatus();
+    public Response getStatus(@PathParam("id") int id) {
+        
+        for (StatusRepresentation srep : statuses) {
+            if (srep.getId() == id) {
+                return Response.ok(srep).build();
             }
         }
-        for (Itiniery itin : booked) {
-            if (itin.getId() == id) {
-                return itin.getStatus();
-            }
-        }
-        return "No itiniery with ID: " + id;
+        
+        return Response.ok().build();
     }
     
     @Path("/{id}/get/order")
     @GET
-    public List<String> getOrder(@PathParam("id") int id) {
-        Itiniery main = new Itiniery(0);
-        
-        for (Itiniery itin : running) {
-            if (itin.getId() == id) {
-                main = itin;
-            }
-        }
-        if (main.getId() == 0) {
-            for (Itiniery itin : booked) {
-                if (itin.getId() == id) {
-                    main = itin;
-                }
+    public Response getOrder(@PathParam("id") int id) {
+        for (OrderRepresentation or : orders) {
+            if (or.getId() == id) {
+                return Response.ok(or).build();
             }
         }
         
-        List<String> output = new ArrayList();
-        
-        return output;
+        return Response.ok().build();
     }
     
     @Path("/book/{id}/{name}/{numer}/{month}/{year}")
     @POST
     public void bookItin(@PathParam("id") int id, @PathParam("name") String name, 
             @PathParam("number") String number, @PathParam("month") int month, 
-            @PathParam("year") int year) {
+            @PathParam("year") int year) throws Exception{
                 
         BookRequest br = new BookRequest();
         br.getCreditCardInfo().getExpirationDate().setMonth(month);
@@ -193,70 +94,36 @@ public class TravelGoodResource {
         rbf.getCreditCardInfo().setName(name);
         rbf.getCreditCardInfo().setNumber(number);
         
-        for (Itiniery itin : running) {
-            if (itin.getId() == id) {
-                for (int i : itin.getHotels()){
-                    br.setBookNum(i);
-                    try {
-                        bookHotel(br);
-                    } catch (Exception e) {
-                    }
-                }
-                for (int i : itin.getFlights()) {
-                    rbf.setBookingNumber(i);
-                    try {
-                        bookFlight(rbf);
-                    } catch (Exception e) {
-                    }
-                }
-                running.remove(itin);
-                booked.add(itin);
-                itin.setStatus("Closed");
+        for (OrderRepresentation order : orders) {
+            for (HotelInfo hi : order.getHotels()) {
+                br.setBookNum(hi.getBookNum());
+                NiceViewResource.book(br);
+            }
+            for (FlightInfo fi : order.getFlights()) {
+                rbf.setBookingNumber(fi.getBookingNumber());
+                LameDuckResource.book(rbf);
+            }
+        }
+        
+        for (StatusRepresentation srep : statuses) {
+            if (srep.getId() == id) {
+                srep.setStatus("Booked");
                 break;
             }
         }
     }
     
     
-    /* 
-        Below are Web Service Reference methods to NiceView and LameDuck
-    */
-    
-    private static GetResponse getHotels_1(nv.ws.GetRequest input) {
-        nv.ws.NiceViewService service = new nv.ws.NiceViewService();
-        nv.ws.NiceViewWSDLPortType port = service.getNiceViewWSDLPortTypeBindingPort();
-        return port.getHotels(input);
-    }
-
-    private static BookResponse bookHotel(nv.ws.BookRequest input) throws BookFault {
-        nv.ws.NiceViewService service = new nv.ws.NiceViewService();
-        nv.ws.NiceViewWSDLPortType port = service.getNiceViewWSDLPortTypeBindingPort();
-        return port.bookHotel(input);
-    }
-
-    private static CancelResponse cancelHotel(nv.ws.CancelRequest input) throws CancelFault_Exception {
-        nv.ws.NiceViewService service = new nv.ws.NiceViewService();
-        nv.ws.NiceViewWSDLPortType port = service.getNiceViewWSDLPortTypeBindingPort();
-        return port.cancelHotel(input);
-    }
-
-    private static ListOfFlights getFlights_1(ld.ws.Request input) {
-        ld.ws.LameduckService service = new ld.ws.LameduckService();
-        ld.ws.LameduckPortType port = service.getLameduckPortTypeBindingPort();
-        return port.getFlights(input);
-    }
-
-    private static boolean bookFlight(ld.ws.RequestbookFlight input) throws BookFlightFault_Exception {
-        ld.ws.LameduckService service = new ld.ws.LameduckService();
-        ld.ws.LameduckPortType port = service.getLameduckPortTypeBindingPort();
-        return port.bookFlight(input);
-    }
-
-    private static boolean cancelFlight(ld.ws.RequestcancelFlight input) throws CancelFlightFault_Exception {
-        ld.ws.LameduckService service = new ld.ws.LameduckService();
-        ld.ws.LameduckPortType port = service.getLameduckPortTypeBindingPort();
-        return port.cancelFlight(input);
+    public static List<OrderRepresentation> getOrders() {
+        return orders;
     }
     
-    
+    public static void setOrder(OrderRepresentation order) {
+        for (OrderRepresentation o : orders) {
+            if (o.getId() == o.getId()) {
+                o = order;
+                break;
+            }
+        }
+    }
 }
