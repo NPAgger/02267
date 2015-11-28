@@ -46,13 +46,7 @@ xmlns:ns0="http://types.fastmoney.imm.dtu.dk">
                     </xsd:sequence>
                 </xsd:complexType>
             </xsd:element>
-            <xsd:element name="bookResponse">
-                <xsd:complexType>
-                    <xsd:sequence>
-                        <xsd:element name="output" type="xsd:boolean"></xsd:element>
-                    </xsd:sequence>
-                </xsd:complexType>
-            </xsd:element>
+            <xsd:element name="bookResponse" type="xsd:boolean"></xsd:element>
             <xsd:element name="bookHotelFault">
                 <xsd:complexType>
                     <xsd:sequence>
@@ -67,13 +61,7 @@ xmlns:ns0="http://types.fastmoney.imm.dtu.dk">
                     </xsd:sequence>
                 </xsd:complexType>
             </xsd:element>
-            <xsd:element name="cancelResponse">
-                <xsd:complexType>
-                    <xsd:sequence>
-                        <xsd:element name="output" type="xsd:boolean"></xsd:element>
-                    </xsd:sequence>
-                </xsd:complexType>
-            </xsd:element>
+            <xsd:element name="cancelResponse" type="xsd:boolean"></xsd:element>
             <xsd:element name="cancelFault">
                 <xsd:complexType>
                     <xsd:sequence>
