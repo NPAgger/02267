@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package rest.travelgood;
+package ws.travelgood.resource;
 
 import java.util.Set;
 import javax.ws.rs.core.Application;
@@ -29,9 +29,10 @@ public class ApplicationConfig extends Application {
      * If required, comment out calling this method in getClasses().
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
-        resources.add(rest.travelgood.LameDuckResource.class);
-        resources.add(rest.travelgood.NiceViewResource.class);
-        resources.add(rest.travelgood.TravelGoodResource.class);
+        resources.add(ws.travelgood.resource.ItinieryResource.class);
+        resources.add(ws.travelgood.resource.ItinieryStatusResource.class);
+        resources.add(ws.travelgood.resource.LameDuckResource.class);
+        resources.add(ws.travelgood.resource.NiceViewResource.class);
     }
     
 }

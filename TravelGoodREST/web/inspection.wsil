@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<inspection>
+    <service>
+        <name>TravelGoodREST</name>
+        <abstract>A RESTful service for a travel agency</abstract>
+        <description referencedNamespace="http://jersey.java.net/" location="http://localhost:8080/travelgood/webresources/application.wadl"></description>
+    </service>
+    <service>
+        <name>TravelGoodBPEL</name>
+        <abstract>A BPEL service for a travel agency</abstract>
+        <description referenceNamespace="http://schemas.xmlsoap.org/wsdl/" location="http://localhost:9080/travelGoodService/travelgood?wsdl"></description>
+    </service>
+    <link referencedNamespace="http://schemas.xmlsoap.org/ws/2001/10/inspection/" location="http://localhost:8080/LameDuck/inspection.wsil"/>
+    <link referencedNamespace="http://schemas.xmlsoap.org/ws/2001/10/inspection/" location="http://localhost:8080/NiceView/inspection.wsil"/>
+</inspection>
