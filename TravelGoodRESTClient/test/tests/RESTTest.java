@@ -194,4 +194,334 @@ public class RESTTest {
             assertEquals(hi.getStatus(),"confirmed");
         }
     }
+    
+    @Test
+    public void testP2() {
+        StatusRepresentation out = target.path("travelgood").path("new")
+                .request().accept(MEDIATYPE_TRAVELGOOD)
+                .put(Entity.entity("", MediaType.TEXT_PLAIN),
+                        StatusRepresentation.class);
+        
+        assertEquals(out.getStatus(),"running");
+        
+        FlightInfoList flightResponse = target.path("lameduck").path("flights")
+                .queryParam("orig", "Reykjavik").queryParam("dest", "Copenhagen")
+                .queryParam("date", "2015-12-19").request()
+                .accept(MEDIATYPE_TRAVELGOOD)
+                .get(FlightInfoList.class);
+        
+        assertEquals(flightResponse.getList().size(),1);        
+                
+        StatusRepresentation addFlight = target.path("lameduck")
+                .path("addflight").path("1").path("7").request().accept(MEDIATYPE_TRAVELGOOD)
+                .put(Entity.entity("", MediaType.TEXT_PLAIN),
+                        StatusRepresentation.class);
+        
+        Link link = out.getLinkByRelation("http://travelgood.ws/relations/self");
+        assertNotNull(link);
+        assertEquals(link.getUri(),
+                "http://localhost:8080/travelgood/webresources/travelgood/1");
+        
+        ItinieryRepresentation itin = client.target(link.getUri()).request()
+                .accept(MEDIATYPE_TRAVELGOOD)
+                .get(ItinieryRepresentation.class);
+        
+        assertEquals(itin.getItin().getStatus(),"updated");
+        
+        CreditCardType cc = new CreditCardType();
+        cc.setName("Anne Strandberg");
+        cc.setNumber("50408816");
+        
+        ExpirationDateType ed = new ExpirationDateType();
+        ed.setMonth(5);
+        ed.setYear(9);
+        cc.setExpDat(ed);
+        
+        link = itin.getLinkByRelation("http://travelgood.ws/relations/cancel");
+        
+        StatusRepresentation status = client.target(link.getUri()).request()
+                .accept(MEDIATYPE_TRAVELGOOD)
+                .put(Entity.entity(cc, MEDIATYPE_TRAVELGOOD),
+                        StatusRepresentation.class);
+        
+        assertEquals(status.getStatus(),"cancelled");
+    }
+    
+    @Test
+    public void testB() {
+        StatusRepresentation out = target.path("travelgood").path("new")
+                .request().accept(MEDIATYPE_TRAVELGOOD)
+                .put(Entity.entity("", MediaType.TEXT_PLAIN),
+                        StatusRepresentation.class);
+        
+        HotelInfoList hotelResponse = target.path("niceview").path("hotels")
+                .queryParam("city", "Reykjavik").queryParam("arr", "2015-12-19")
+                .queryParam("dep", "2015-12-21").request()
+                .accept(MEDIATYPE_TRAVELGOOD)
+                .get(HotelInfoList.class);
+        
+        StatusRepresentation addHotel = target.path("niceview").path("addhotel")
+                .path("1").path("2").request().accept(MEDIATYPE_TRAVELGOOD)
+                .put(Entity.entity("", MediaType.TEXT_PLAIN),
+                        StatusRepresentation.class);
+        
+        FlightInfoList flightResponse = target.path("lameduck").path("flights")
+                .queryParam("orig", "Reykjavik").queryParam("dest", "Copenhagen")
+                .queryParam("date", "2015-12-19").request()
+                .accept(MEDIATYPE_TRAVELGOOD)
+                .get(FlightInfoList.class);
+        
+        StatusRepresentation addFlight = target.path("lameduck")
+                .path("addflight").path("1").path("7").request().accept(MEDIATYPE_TRAVELGOOD)
+                .put(Entity.entity("", MediaType.TEXT_PLAIN),
+                        StatusRepresentation.class);
+        
+        flightResponse = target.path("lameduck").path("flights")
+                .queryParam("orig", "Copenhagen").queryParam("dest", "Moscow")
+                .queryParam("date", "2015-12-23").request()
+                .accept(MEDIATYPE_TRAVELGOOD)
+                .get(FlightInfoList.class);
+                
+        addFlight = target.path("lameduck")
+                .path("addflight").path("1").path("2").request().accept(MEDIATYPE_TRAVELGOOD)
+                .put(Entity.entity("", MediaType.TEXT_PLAIN),
+                        StatusRepresentation.class);
+        
+        Link link = addHotel.getLinkByRelation("http://travelgood.ws/relations/self");
+        ItinieryRepresentation itin = client.target(link.getUri()).request()
+                .accept(MEDIATYPE_TRAVELGOOD).get(ItinieryRepresentation.class);
+        
+        assertEquals(itin.getItin().getStatus(),"updated");
+        assertEquals(itin.getItin().getHotels().size(),1);
+        assertEquals(itin.getItin().getFlights().size(),2);
+        
+        for (HotelInfoType hi : itin.getItin().getHotels()) {
+            assertEquals(hi.getStatus(),"unconfirmed");
+        }
+        for (FlightInfoType hi : itin.getItin().getFlights()) {
+            assertEquals(hi.getStatus(),"unconfirmed");
+        }
+        
+        CreditCardType cc = new CreditCardType();
+        cc.setName("Tick Joachim");
+        cc.setNumber("50408825");
+        
+        ExpirationDateType ed = new ExpirationDateType();
+        ed.setMonth(2);
+        ed.setYear(11);
+        cc.setExpDat(ed);
+        
+        link = itin.getLinkByRelation("http://travelgood.ws/relations/book");
+        
+        Response response = client.target(link.getUri()).request()
+                .accept(MEDIATYPE_TRAVELGOOD)
+                .put(Entity.entity(cc, MEDIATYPE_TRAVELGOOD),
+                        Response.class);
+        
+        assertEquals(response.getStatus(),
+                Response.Status.BAD_REQUEST.getStatusCode());
+        
+        link = itin.getLinkByRelation("http://travelgood.ws/relations/self");
+        itin = client.target(link.getUri()).request()
+                .accept(MEDIATYPE_TRAVELGOOD).get(ItinieryRepresentation.class);
+        
+        assertEquals(itin.getItin().getHotels().get(0).getStatus(),"confirmed");
+        for (FlightInfoType hi : itin.getItin().getFlights()) {
+            assertEquals(hi.getStatus(),"unconfirmed");
+        }
+    }
+    
+    @Test
+    public void testC1() {
+        StatusRepresentation out = target.path("travelgood").path("new")
+                .request().accept(MEDIATYPE_TRAVELGOOD)
+                .put(Entity.entity("", MediaType.TEXT_PLAIN),
+                        StatusRepresentation.class);
+        
+        HotelInfoList hotelResponse = target.path("niceview").path("hotels")
+                .queryParam("city", "Reykjavik").queryParam("arr", "2015-12-19")
+                .queryParam("dep", "2015-12-21").request()
+                .accept(MEDIATYPE_TRAVELGOOD)
+                .get(HotelInfoList.class);
+        
+        StatusRepresentation addHotel = target.path("niceview").path("addhotel")
+                .path("1").path("2").request().accept(MEDIATYPE_TRAVELGOOD)
+                .put(Entity.entity("", MediaType.TEXT_PLAIN),
+                        StatusRepresentation.class);
+        
+        FlightInfoList flightResponse = target.path("lameduck").path("flights")
+                .queryParam("orig", "Reykjavik").queryParam("dest", "Copenhagen")
+                .queryParam("date", "2015-12-19").request()
+                .accept(MEDIATYPE_TRAVELGOOD)
+                .get(FlightInfoList.class);
+        
+        StatusRepresentation addFlight = target.path("lameduck")
+                .path("addflight").path("1").path("7").request().accept(MEDIATYPE_TRAVELGOOD)
+                .put(Entity.entity("", MediaType.TEXT_PLAIN),
+                        StatusRepresentation.class);
+        
+        flightResponse = target.path("lameduck").path("flights")
+                .queryParam("orig", "Copenhagen").queryParam("dest", "Moscow")
+                .queryParam("date", "2015-12-23").request()
+                .accept(MEDIATYPE_TRAVELGOOD)
+                .get(FlightInfoList.class);
+                
+        addFlight = target.path("lameduck")
+                .path("addflight").path("1").path("2").request().accept(MEDIATYPE_TRAVELGOOD)
+                .put(Entity.entity("", MediaType.TEXT_PLAIN),
+                        StatusRepresentation.class);
+        
+        Link link = addHotel.getLinkByRelation("http://travelgood.ws/relations/self");
+        ItinieryRepresentation itin = client.target(link.getUri()).request()
+                .accept(MEDIATYPE_TRAVELGOOD).get(ItinieryRepresentation.class);
+        
+        assertEquals(itin.getItin().getStatus(),"updated");
+        assertEquals(itin.getItin().getHotels().size(),1);
+        assertEquals(itin.getItin().getFlights().size(),2);
+        
+        CreditCardType cc = new CreditCardType();
+        cc.setName("Anne Strandberg");
+        cc.setNumber("50408816");
+        
+        ExpirationDateType ed = new ExpirationDateType();
+        ed.setMonth(5);
+        ed.setYear(9);
+        cc.setExpDat(ed);
+        
+        StatusRepresentation status = target.path("travelgood")
+                .path(itin.getItin().getId()).path("book").request()
+                .accept(MEDIATYPE_TRAVELGOOD)
+                .put(Entity.entity(cc, MEDIATYPE_TRAVELGOOD),
+                        StatusRepresentation.class);
+        
+        assertEquals(status.getStatus(),"booked");
+        
+        link = status.getLinkByRelation("http://travelgood.ws/relations/self");
+        itin = client.target(link.getUri()).request()
+                .accept(MEDIATYPE_TRAVELGOOD).get(ItinieryRepresentation.class);
+        
+        for (HotelInfoType hi : itin.getItin().getHotels()) {
+            assertEquals(hi.getStatus(),"confirmed");
+        }
+        for (FlightInfoType hi : itin.getItin().getFlights()) {
+            assertEquals(hi.getStatus(),"confirmed");
+        }
+        
+        link = status.getLinkByRelation("http://travelgood.ws/relations/cancel");
+        status = client.target(link.getUri()).request()
+                .accept(MEDIATYPE_TRAVELGOOD)
+                .put(Entity.entity(cc, MEDIATYPE_TRAVELGOOD),
+                        StatusRepresentation.class);
+        
+        assertEquals(status.getStatus(),"cancelled");
+        
+        link = status.getLinkByRelation("http://travelgood.ws/relations/self");
+        itin = client.target(link.getUri()).request()
+                .accept(MEDIATYPE_TRAVELGOOD).get(ItinieryRepresentation.class);
+        
+        for (HotelInfoType hi : itin.getItin().getHotels()) {
+            assertEquals(hi.getStatus(),"cancelled");
+        }
+        for (FlightInfoType hi : itin.getItin().getFlights()) {
+            assertEquals(hi.getStatus(),"cancelled");
+        }
+    }
+    
+    @Test
+    public void testC2() {
+        StatusRepresentation out = target.path("travelgood").path("new")
+                .request().accept(MEDIATYPE_TRAVELGOOD)
+                .put(Entity.entity("", MediaType.TEXT_PLAIN),
+                        StatusRepresentation.class);
+        
+        HotelInfoList hotelResponse = target.path("niceview").path("hotels")
+                .queryParam("city", "Reykjavik").queryParam("arr", "2015-12-19")
+                .queryParam("dep", "2015-12-21").request()
+                .accept(MEDIATYPE_TRAVELGOOD)
+                .get(HotelInfoList.class);
+        
+        StatusRepresentation addHotel = target.path("niceview").path("addhotel")
+                .path("1").path("2").request().accept(MEDIATYPE_TRAVELGOOD)
+                .put(Entity.entity("", MediaType.TEXT_PLAIN),
+                        StatusRepresentation.class);
+        
+        FlightInfoList flightResponse = target.path("lameduck").path("flights")
+                .queryParam("orig", "Reykjavik").queryParam("dest", "Copenhagen")
+                .queryParam("date", "2015-12-19").request()
+                .accept(MEDIATYPE_TRAVELGOOD)
+                .get(FlightInfoList.class);
+        
+        StatusRepresentation addFlight = target.path("lameduck")
+                .path("addflight").path("1").path("7").request().accept(MEDIATYPE_TRAVELGOOD)
+                .put(Entity.entity("", MediaType.TEXT_PLAIN),
+                        StatusRepresentation.class);
+        
+        hotelResponse = target.path("niceview").path("hotels")
+                .queryParam("city", "Beijing").queryParam("arr", "2015-12-19")
+                .queryParam("dep", "2015-12-21").request()
+                .accept(MEDIATYPE_TRAVELGOOD)
+                .get(HotelInfoList.class);
+        
+        addHotel = target.path("niceview").path("addhotel")
+                .path("1").path("3").request().accept(MEDIATYPE_TRAVELGOOD)
+                .put(Entity.entity("", MediaType.TEXT_PLAIN),
+                        StatusRepresentation.class);
+        
+        Link link = addHotel.getLinkByRelation("http://travelgood.ws/relations/self");
+        ItinieryRepresentation itin = client.target(link.getUri()).request()
+                .accept(MEDIATYPE_TRAVELGOOD).get(ItinieryRepresentation.class);
+        
+        assertEquals(itin.getItin().getStatus(),"updated");
+        assertEquals(itin.getItin().getHotels().size(),2);
+        assertEquals(itin.getItin().getFlights().size(),1);
+        
+        CreditCardType cc = new CreditCardType();
+        cc.setName("Anne Strandberg");
+        cc.setNumber("50408816");
+        
+        ExpirationDateType ed = new ExpirationDateType();
+        ed.setMonth(5);
+        ed.setYear(9);
+        cc.setExpDat(ed);
+        
+        StatusRepresentation status = target.path("travelgood")
+                .path(itin.getItin().getId()).path("book").request()
+                .accept(MEDIATYPE_TRAVELGOOD)
+                .put(Entity.entity(cc, MEDIATYPE_TRAVELGOOD),
+                        StatusRepresentation.class);
+        
+        assertEquals(status.getStatus(),"booked");
+        
+        link = status.getLinkByRelation("http://travelgood.ws/relations/self");
+        itin = client.target(link.getUri()).request()
+                .accept(MEDIATYPE_TRAVELGOOD).get(ItinieryRepresentation.class);
+        
+        for (HotelInfoType hi : itin.getItin().getHotels()) {
+            assertEquals(hi.getStatus(),"confirmed");
+        }
+        for (FlightInfoType hi : itin.getItin().getFlights()) {
+            assertEquals(hi.getStatus(),"confirmed");
+        }
+        
+        cc.setNumber("50408817");
+        
+        link = status.getLinkByRelation("http://travelgood.ws/relations/cancel");
+        Response response = client.target(link.getUri()).request()
+                .accept(MEDIATYPE_TRAVELGOOD)
+                .put(Entity.entity(cc, MEDIATYPE_TRAVELGOOD),
+                        Response.class);
+        
+        assertEquals(response.getStatus(),
+                Response.Status.BAD_REQUEST.getStatusCode());
+        
+        link = status.getLinkByRelation("http://travelgood.ws/relations/self");
+        itin = client.target(link.getUri()).request()
+                .accept(MEDIATYPE_TRAVELGOOD).get(ItinieryRepresentation.class);
+        
+        assertEquals(itin.getItin().getStatus(),"booked");
+        
+        assertEquals(itin.getItin().getHotels().get(0).getStatus(),"cancelled");
+        assertEquals(itin.getItin().getFlights().get(0).getStatus(),"confirmed");
+        assertEquals(itin.getItin().getHotels().get(1).getStatus(),"cancelled");
+    }
 }
