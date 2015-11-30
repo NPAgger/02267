@@ -36,7 +36,7 @@ public class Itiniery {
     }
     
     public void addHotel(HotelInfoType hotel) {
-        hotels.addHotel(hotel);
+        this.hotels.addHotel(hotel);
     }
     
     public List<FlightInfoType> getFlights() {

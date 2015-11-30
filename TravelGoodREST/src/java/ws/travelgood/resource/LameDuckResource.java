@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
+import javax.ws.rs.NotAllowedException;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -22,7 +23,6 @@ import javax.xml.datatype.DatatypeFactory;
 import ws.ld.*;
 import ws.travelgood.data.FlightInfoList;
 import ws.travelgood.data.FlightInfoType;
-import ws.travelgood.data.HotelInfoType;
 import ws.travelgood.data.Itiniery;
 import ws.travelgood.representation.StatusRepresentation;
 /**
@@ -72,11 +72,11 @@ public class LameDuckResource {
         return Response.ok(info).build();
     }
     
-    @Path("{iid}/addflight/{hid}")
+    @Path("addflight/{iid}/{fid}")
     @PUT
     @Produces(ItinieryResource.MEDIATYPE_TRAVELGOOD)
     public StatusRepresentation addFlight(@PathParam("iid") String iid, 
-            @PathParam("hid") String fid) {
+            @PathParam("fid") String fid) {
         StatusRepresentation status = new StatusRepresentation();
         
         Itiniery itin = ItinieryResource.itins.get(iid);
@@ -86,9 +86,16 @@ public class LameDuckResource {
                     entity("Itiniery not found").
                     build();
             throw new NotFoundException(r);
+        } else if (!(itin.getStatus() == "running" || 
+                itin.getStatus() == "updated")) {
+            Response r = Response.
+                    status(Response.Status.FORBIDDEN).
+                    entity("Itiniery is not open").
+                    build();
+            throw new NotAllowedException(r);
         }
         
-        FlightInfoType flight = lastSearch.get(iid);
+        FlightInfoType flight = lastSearch.get(fid);
         if (flight == null) {
             Response r = Response.
                     status(Response.Status.NOT_FOUND).

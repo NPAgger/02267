@@ -28,5 +28,9 @@ public class HotelInfoType {
     public int getBookNum() {
         return values.getBookNum();
     }
+    
+    public HotelInfo getHotel() {
+        return values;
+    }
 }
 

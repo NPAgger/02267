@@ -27,4 +27,8 @@ public class FlightInfoType {
     public int getBookNum() {
         return values.getBookingNumber();
     }
+    
+    public FlightInfo getFlight() {
+        return values;
+    }
 }

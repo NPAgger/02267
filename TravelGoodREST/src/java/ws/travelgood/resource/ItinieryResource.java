@@ -5,9 +5,12 @@
  */
 package ws.travelgood.resource;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.NotAllowedException;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -27,7 +30,8 @@ public class ItinieryResource {
 
     static final String STATUS_RUNNING = "running";
     static final String STATUS_UPDATED = "updated";
-    static final String STATUS_ORDERED = "booked";
+    static final String STATUS_BOOKED = "booked";
+    static final String STATUS_CANCELLED = "cancelled";
     static final String STATUS_PAYMENT_CONFIRMED = "payment confirmed";
     static final String RELATION_BASE = "http://travelgood.ws/relations/";
     static final String CANCEL_RELATION = RELATION_BASE + "cancel";
@@ -75,7 +79,7 @@ public class ItinieryResource {
     @Path("new")
     @PUT
     @Produces(MEDIATYPE_TRAVELGOOD)
-    public StatusRepresentation createitin() {
+    public StatusRepresentation createItin() {
         int count = itins.size() + 1;
         
         String id = Integer.toString(count);
@@ -84,6 +88,9 @@ public class ItinieryResource {
         itinRep.setStatus(STATUS_RUNNING);
         
         Itiniery itin = new Itiniery();
+        itin.setHotels(new ArrayList());
+        itin.setFlights(new ArrayList());
+        
         itin.setId(id);
         itin.setStatus(STATUS_RUNNING);
         
@@ -91,6 +98,55 @@ public class ItinieryResource {
         
         addSelfLink(id,itinRep);
         addStatusLink(id,itinRep);
+        
+        return itinRep;
+    }
+    
+    @Path("{id}/book")
+    @PUT
+    @Consumes(MEDIATYPE_TRAVELGOOD)
+    @Produces(MEDIATYPE_TRAVELGOOD)
+    public StatusRepresentation bookItin(@PathParam("id") String id, 
+            CreditCardType cc) {
+        
+        Itiniery itin = itins.get(id);
+        if (itin == null) {
+            Response r = Response.
+                    status(Response.Status.NOT_FOUND).
+                    entity("Itiniery not found").
+                    build();
+            throw new NotFoundException(r);
+        } else if (!(itin.getStatus() == "running" || 
+                itin.getStatus() == "updated")) {
+            Response r = Response.
+                    status(Response.Status.FORBIDDEN).
+                    entity("Itiniery is not open").
+                    build();
+            throw new NotAllowedException(r);
+        }
+        StatusRepresentation itinRep = new StatusRepresentation();
+        
+        if (cc.getExpDate() == null) {
+            itinRep.setStatus(cc.getName());
+            return itinRep;
+        }
+        
+        String result = NiceViewResource.bookList(itin.getHotels(), cc);
+        
+        if (result == "complete") {
+            itinRep.setStatus(STATUS_BOOKED);
+            addSelfLink(id,itinRep);
+            addStatusLink(id,itinRep);
+            
+            itin.setStatus(STATUS_BOOKED);
+        } else {
+            itinRep.setStatus("updated");
+            Response r = Response.
+                    status(Response.Status.CONFLICT).
+                    entity(result).
+                    build();
+            throw new NotAllowedException(r);
+        }
         
         return itinRep;
     }
