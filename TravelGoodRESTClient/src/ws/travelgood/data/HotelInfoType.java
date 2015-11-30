@@ -5,7 +5,6 @@
  */
 package ws.travelgood.data;
 
-import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -17,12 +16,21 @@ import ws.nv.HotelInfo;
 @XmlRootElement
 public class HotelInfoType {
     @XmlElement
-    public HotelInfo values;
+    private HotelInfo values;
+    private String status;
     
     public HotelInfoType() {}
     
     public HotelInfoType(HotelInfo info) {
-        values = info;
+        this.values = info;
+    }
+    
+    public void setStatus(String status) {
+        this.status = status;
+    }
+    
+    public String getStatus() {
+        return status;
     }
     
     public int getBookNum() {
@@ -33,4 +41,3 @@ public class HotelInfoType {
         return values;
     }
 }
-

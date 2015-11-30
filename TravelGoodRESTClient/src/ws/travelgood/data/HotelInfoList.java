@@ -5,6 +5,7 @@
  */
 package ws.travelgood.data;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -16,7 +17,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class HotelInfoList {
     @XmlElement
-    public List<HotelInfoType> values;
+    public List<HotelInfoType> values = new ArrayList();
     
     public HotelInfoList() {}
     

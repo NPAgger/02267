@@ -16,12 +16,21 @@ import ws.ld.FlightInfo;
 @XmlRootElement
 public class FlightInfoType {
     @XmlElement
-    public FlightInfo values;
+    private FlightInfo values;
+    private String status;
     
     public FlightInfoType() {}
     
     public FlightInfoType(FlightInfo info) {
-        values = info;
+        this.values = info;
+    }
+    
+    public void setStatus(String status) {
+        this.status = status;
+    }
+    
+    public String getStatus() {
+        return status;
     }
     
     public int getBookNum() {

@@ -5,18 +5,19 @@
  */
 package ws.travelgood.data;
 
-import java.util.ArrayList;
 import java.util.List;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 /**
  *
  * @author Nis
  */
-@XmlRootElement
+@XmlRootElement()
 public class Itiniery {
-    private String id;
     private HotelInfoList hotels = new HotelInfoList();
     private FlightInfoList flights = new FlightInfoList();
+    
+    private String id;
     private String status;
     
     public String getId() {

@@ -5,6 +5,7 @@
  */
 package ws.travelgood.data;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -16,7 +17,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class FlightInfoList {
     @XmlElement
-    public List<FlightInfoType> values;
+    public List<FlightInfoType> values = new ArrayList();
     
     public FlightInfoList() {}
     
