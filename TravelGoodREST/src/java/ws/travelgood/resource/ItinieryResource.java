@@ -8,6 +8,7 @@ package ws.travelgood.resource;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import javax.ws.rs.BadRequestException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.NotAllowedException;
@@ -126,29 +127,101 @@ public class ItinieryResource {
         }
         StatusRepresentation itinRep = new StatusRepresentation();
         
-        if (cc.getExpDate() == null) {
-            itinRep.setStatus(cc.getName());
-            return itinRep;
-        }
-        
         String result = NiceViewResource.bookList(itin.getHotels(), cc);
         
         if (result == "complete") {
-            itinRep.setStatus(STATUS_BOOKED);
-            addSelfLink(id,itinRep);
-            addStatusLink(id,itinRep);
+            result = LameDuckResource.bookList(itin.getFlights(), cc);
+            if (result == "complete") {
+                itinRep.setStatus(STATUS_BOOKED);
+                addSelfLink(id,itinRep);
+                addStatusLink(id,itinRep);
             
-            itin.setStatus(STATUS_BOOKED);
+                itin.setStatus(STATUS_BOOKED);
+            } else {
+                itinRep.setStatus("updated");
+                Response r = Response.
+                    status(Response.Status.BAD_REQUEST).
+                    entity(result).
+                    build();
+                throw new BadRequestException(r);
+            }
         } else {
             itinRep.setStatus("updated");
             Response r = Response.
-                    status(Response.Status.CONFLICT).
+                    status(Response.Status.BAD_REQUEST).
                     entity(result).
                     build();
-            throw new NotAllowedException(r);
+            throw new BadRequestException(r);
         }
         
         return itinRep;
+    }
+    
+    @Path("{id}/cancel")
+    @PUT
+    @Consumes(MEDIATYPE_TRAVELGOOD)
+    @Produces(MEDIATYPE_TRAVELGOOD)
+    public StatusRepresentation cancelItin(@PathParam("id") String id, 
+            CreditCardType cc) {
+        
+        Itiniery itin = itins.get(id);
+        if (itin == null) {
+            Response r = Response.
+                    status(Response.Status.NOT_FOUND).
+                    entity("Itiniery not found").
+                    build();
+            throw new NotFoundException(r);
+        }
+        if (itin.getStatus() == "cancelled") {
+            Response r = Response.
+                    status(Response.Status.BAD_REQUEST).
+                    entity("Itiniery already cancelled").
+                    build();
+            throw new BadRequestException(r);
+        }
+        
+        StatusRepresentation rep = new StatusRepresentation();
+        if (itin.getStatus() == "running" || itin.getStatus() == "updated") {
+            itin = new Itiniery();
+            itin.setFlights(new ArrayList());
+            itin.setHotels(new ArrayList());
+            itin.setStatus(STATUS_CANCELLED);
+            
+            itins.put(id, itin);
+            
+            itin.setStatus(STATUS_CANCELLED);
+        }
+        else if(itin.getStatus() == "booked") {
+            String result = NiceViewResource.cancelList(itin.getHotels(), cc);
+            
+            if (result == "complete") {
+                result = LameDuckResource.cancelList(itin.getFlights(), cc);
+                
+                if (result == "complete") {
+                    rep.setStatus(STATUS_CANCELLED);
+                    addSelfLink(id,rep);
+                    addStatusLink(id,rep);
+            
+                    itin.setStatus(STATUS_CANCELLED);
+                } else {
+                    rep.setStatus("updated");
+                    Response r = Response.
+                    status(Response.Status.BAD_REQUEST).
+                    entity(result).
+                    build();
+                    throw new BadRequestException(r);
+                }
+            } else {
+                rep.setStatus("updated");
+                Response r = Response.
+                status(Response.Status.BAD_REQUEST).
+                entity(result).
+                build();
+                throw new BadRequestException(r);
+            }
+        }
+        
+        return rep;
     }
     
     public static void addSelfLink(String id, Representation response) {
