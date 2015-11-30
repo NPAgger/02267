@@ -24,14 +24,16 @@ public class JUnitTests {
     @Test
     public void getFlightsTest() throws DatatypeConfigurationException {
         Request request = new Request();
-        request.setOrigin("Iceland");
-        request.setDestination("China");
+        request.setOrigin("Copenhagen");
+        request.setDestination("Moscow");
         DatatypeFactory df = DatatypeFactory.newInstance();
         XMLGregorianCalendar date;
-        date = df.newXMLGregorianCalendar("2015-11-10T00:00:00");
+        date = df.newXMLGregorianCalendar("2015-12-23T00:00:00");
         request.setDate(date);
         
         ListOfFlights list = getFlights(request);
+        
+        assertEquals(2, list.getFlightInfo().get(0).getBookingNumber());
     }
     
     @Test
