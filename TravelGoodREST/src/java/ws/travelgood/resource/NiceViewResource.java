@@ -145,6 +145,29 @@ public class NiceViewResource {
 
         return "complete";
     }
+    
+    public static String cancelList(List<HotelInfoType> input, CreditCardType cc) {
+        CreditCardInfoType credit = cc.toNVcc();
+        
+        int counter;
+        CancelRequest cancel = new CancelRequest();
+        
+        for (counter = 0; counter < input.size(); counter++ ) {
+            cancel.setBookNum(input.get(counter).getHotel().getBookNum());
+            try {
+                cancelHotel(cancel);
+            } catch (CancelFault_Exception cf) {
+                BookRequest request = new BookRequest();
+                for (int i = 0; i <= counter; i++) {
+                    request.setBookNum(input.get(counter).getHotel().getBookNum());
+                    request.setCreditCardInfo(credit);
+                }
+                return "cancelling "+counter+" failed";
+            }
+        }
+
+        return "complete";
+    }
 
     private static GetResponse getHotels(ws.nv.GetRequest input) {
         ws.nv.NiceViewService service = new ws.nv.NiceViewService();

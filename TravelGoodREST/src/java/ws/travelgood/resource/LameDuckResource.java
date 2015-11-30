@@ -21,6 +21,7 @@ import javax.ws.rs.core.Response;
 import javax.xml.datatype.DatatypeFactory;
 
 import ws.ld.*;
+import ws.travelgood.data.CreditCardType;
 import ws.travelgood.data.FlightInfoList;
 import ws.travelgood.data.FlightInfoType;
 import ws.travelgood.data.Itiniery;
@@ -111,10 +112,75 @@ public class LameDuckResource {
         
         return status;
     }
+    
+    public static String bookList(List<FlightInfoType> input, CreditCardType cc) {
+        CreditCardInfoType credit = cc.toLDcc();
+        
+        int counter;
+        RequestbookFlight request = new RequestbookFlight();
+        
+        for (counter = 0; counter < input.size(); counter++ ) {
+            request.setBookingNumber(input.get(0).getFlight().getBookingNumber());
+            request.setCreditCardInfo(credit);
+            try {
+                bookFlight(request);
+            } catch (BookFlightFault_Exception bf) {
+                RequestcancelFlight cancel = new RequestcancelFlight();
+                for (int i = 0; i <= counter; i++) {
+                    cancel.setBookingNumber(input.get(0).getFlight().getBookingNumber());
+                    cancel.setCreditCardInfo(credit);
+                    cancel.setPrice(input.get(0).getFlight().getPrice());
+                }
+                return "booking "+counter+" failed";
+            }
+        }
+
+        return "complete";
+    }
+    
+    public static String cancelList(List<FlightInfoType> input, CreditCardType cc) {
+        CreditCardInfoType credit = cc.toLDcc();
+        
+        int counter;
+        RequestcancelFlight cancel = new RequestcancelFlight();
+        cancel.setBookingNumber(input.get(0).getFlight().getBookingNumber());
+                    cancel.setCreditCardInfo(credit);
+                    cancel.setPrice(input.get(0).getFlight().getPrice());
+        
+        for (counter = 0; counter < input.size(); counter++ ) {
+            cancel.setBookingNumber(input.get(0).getFlight().getBookingNumber());
+            cancel.setCreditCardInfo(credit);
+            cancel.setPrice(input.get(0).getFlight().getPrice());
+            try {
+                cancelFlight(cancel);
+            } catch (CancelFlightFault_Exception cf) {
+                RequestbookFlight request = new RequestbookFlight();
+                for (int i = 0; i <= counter; i++) {
+                    request.setBookingNumber(input.get(0).getFlight().getBookingNumber());
+                    request.setCreditCardInfo(credit);
+                }
+                return "cancelling "+counter+" failed";
+            }
+        }
+
+        return "complete";
+    }
 
     private static ListOfFlights getFlights(ws.ld.Request input) {
         ws.ld.LameduckService service = new ws.ld.LameduckService();
         ws.ld.LameduckPortType port = service.getLameduckPortTypeBindingPort();
         return port.getFlights(input);
+    }
+
+    private static boolean bookFlight(ws.ld.RequestbookFlight input) throws BookFlightFault_Exception {
+        ws.ld.LameduckService service = new ws.ld.LameduckService();
+        ws.ld.LameduckPortType port = service.getLameduckPortTypeBindingPort();
+        return port.bookFlight(input);
+    }
+
+    private static boolean cancelFlight(ws.ld.RequestcancelFlight input) throws CancelFlightFault_Exception {
+        ws.ld.LameduckService service = new ws.ld.LameduckService();
+        ws.ld.LameduckPortType port = service.getLameduckPortTypeBindingPort();
+        return port.cancelFlight(input);
     }
 }
