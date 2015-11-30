@@ -9,7 +9,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Nis
+ * @author Mathias
  */
 @XmlRootElement()
 public class ExpirationDateType {

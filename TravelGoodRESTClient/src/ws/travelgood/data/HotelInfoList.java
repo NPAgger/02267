@@ -12,7 +12,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Nis
+ * @author Thomas
  */
 @XmlRootElement
 public class HotelInfoList {

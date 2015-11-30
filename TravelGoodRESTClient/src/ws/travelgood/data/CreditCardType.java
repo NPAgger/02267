@@ -12,7 +12,7 @@ import ws.nv.*;
 
 /**
  *
- * @author Nis
+ * @author Mathias
  */
 @XmlRootElement()
 public class CreditCardType {

@@ -11,7 +11,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import ws.ld.FlightInfo;
 /**
  *
- * @author Nis
+ * @author Andri
  */
 @XmlRootElement
 public class FlightInfoType {
