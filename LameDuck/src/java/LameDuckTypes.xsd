@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
+<!-- Andri - s150843 (main author), Thomas - s143351(co-author) -->
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
             targetNamespace="http://lameducktypes"
             xmlns:tns="http://lameducktypes"

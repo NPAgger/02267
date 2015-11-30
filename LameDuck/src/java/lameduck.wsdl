@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Andri - s150843 (main author), Thomas - s143351(co-author) -->
 <definitions name="lameduck" targetNamespace="http://lameduck.ws"
     xmlns="http://schemas.xmlsoap.org/wsdl/"
     xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
@@ -11,76 +12,6 @@
         <xsd:schema>
             <xsd:import namespace="http://lameducktypes" schemaLocation="LameDuckTypes.xsd" />            
         </xsd:schema>
-<!--        <xsd:schema targetNamespace="flightservice">
-            <xsd:import namespace="http://types.fastmoney.imm.dtu.dk" schemaLocation="http://fastmoney.imm.dtu.dk:8080/BankServiceTypes.xsd"/>
-            <xsd:complexType name="flight">
-                <xsd:sequence>
-                    <xsd:element name="origin" type="xsd:string"></xsd:element>
-                    <xsd:element name="destination" type="xsd:string"></xsd:element>
-                    <xsd:element name="departure" type="xsd:dateTime"></xsd:element>
-                    <xsd:element name="arrival" type="xsd:dateTime"></xsd:element>
-                    <xsd:element name="carrier" type="xsd:string"></xsd:element>
-                </xsd:sequence>
-            </xsd:complexType>
-            <xsd:complexType name="flightInfo">
-                <xsd:sequence>
-                    <xsd:element name="airlineReservationService" type="xsd:string"></xsd:element>
-                    <xsd:element name="price" type="xsd:int"></xsd:element>
-                    <xsd:element name="bookingNumber" type="xsd:int"></xsd:element>
-                    <xsd:element name="flight" type="tns:flight"></xsd:element>
-                </xsd:sequence>
-            </xsd:complexType>
-            <xsd:complexType name="listOfFlights">
-                <xsd:sequence>
-                    <xsd:element name="flightInfo" type="tns:flightInfo" minOccurs="0" maxOccurs="unbounded"></xsd:element>
-                </xsd:sequence>
-            </xsd:complexType>
-            <xsd:element name="listOfFlights" type="tns:listOfFlights"></xsd:element>
-            <xsd:element name="date" type="xsd:dateTime"></xsd:element>
-            <xsd:element name="origin" type="xsd:string"></xsd:element>
-            <xsd:element name="destination" type="xsd:string"></xsd:element>
-            <xsd:element name="request">
-                <xsd:complexType>
-                    <xsd:sequence>
-                        <xsd:element ref="tns:date"/>
-                        <xsd:element ref="tns:destination"/>
-                        <xsd:element ref="tns:origin"/>
-                    </xsd:sequence>
-                </xsd:complexType>
-            </xsd:element>
-            <xsd:element name="requestbookFlight">
-                <xsd:complexType>
-                    <xsd:sequence>
-                        <xsd:element name="creditCardInfo" type="ns0:creditCardInfoType"></xsd:element>
-                        <xsd:element name="bookingNumber" type="xsd:int"></xsd:element>
-                    </xsd:sequence>
-                </xsd:complexType>
-            </xsd:element>
-            <xsd:element name="status" type="xsd:boolean"></xsd:element>
-            <xsd:element name="bookFlightFault">
-                <xsd:complexType>
-                    <xsd:sequence>
-                        <xsd:element name="message" type="xsd:string"></xsd:element>
-                    </xsd:sequence>
-                </xsd:complexType>
-            </xsd:element>
-            <xsd:element name="requestcancelFlight">
-                <xsd:complexType>
-                    <xsd:sequence>
-                        <xsd:element name="bookingNumber" type="xsd:int"></xsd:element>
-                        <xsd:element name="price" type="xsd:int"></xsd:element>
-                        <xsd:element name="creditCardInfo" type="ns0:creditCardInfoType"></xsd:element>
-                    </xsd:sequence>
-                </xsd:complexType>
-            </xsd:element>
-            <xsd:element name="cancelFlightFault">
-                <xsd:complexType>
-                    <xsd:sequence>
-                        <xsd:element name="message" type="xsd:string"></xsd:element>
-                    </xsd:sequence>
-                </xsd:complexType>
-            </xsd:element>
-        </xsd:schema>-->
     </types>
     <message name="getFlightRequest">
         <part name="input" element="ns1:request"/>
