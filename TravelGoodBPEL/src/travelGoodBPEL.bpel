@@ -166,6 +166,7 @@
 				               </copy>
 				            </assign>
 				            <reply name="BookItineraryFaultReply" partnerLink="PartnerLink1" operation="BookItinerary" portType="tns:TravelGoodPortType" faultName="tns:fault1" variable="BookItineraryFault"/>
+				          <exit name="Exit4"/>
 				         </sequence>
 				      </catchAll>
 				   </faultHandlers>
