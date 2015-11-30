@@ -11,7 +11,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import ws.nv.HotelInfo;
 /**
  *
- * @author Nis
+ * @author Thomas
  */
 @XmlRootElement
 public class HotelInfoType {
