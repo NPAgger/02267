@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
+<!-- 
+Authors: Thomas (s143351), Andri (s150843)
+Co-authors: Mathias (s113437), Nis (s113407)
+-->
 <process
     name="travelGoodBPEL"
     targetNamespace="http://enterprise.netbeans.org/bpel/TravelGoodBPEL/travelGoodBPEL"

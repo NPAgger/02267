@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+Authors: Thomas (s143351), Andri (s150843)
+Co-authors: Mathias (s113437), Nis (s113407)
+-->
 <definitions name="TravelGood" targetNamespace="http://travelgood.ws"
     xmlns="http://schemas.xmlsoap.org/wsdl/"
     xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
