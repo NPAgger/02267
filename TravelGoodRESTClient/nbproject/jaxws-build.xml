@@ -18,8 +18,8 @@
     </target>
     <target name="wsimport-client-NiceViewService" depends="wsimport-init">
         <mkdir dir="${build.generated.dir}/jax-wsCache/NiceViewService"/>
-        <property name="wsdl-NiceViewService" location="xml-resources/web-service-references/NiceViewService/wsdl/craptop_8080/NiceView/NiceViewService.wsdl"/>
-        <wsimport sourcedestdir="${build.generated.dir}/jax-wsCache/NiceViewService" destdir="${build.generated.dir}/jax-wsCache/NiceViewService" wsdl="${wsdl-NiceViewService}" catalog="catalog.xml" encoding="${source.encoding}" extension="true" verbose="true" fork="false" wsdlLocation="http://craptop:8080/NiceView/NiceViewService?wsdl" xnocompile="true" xendorsed="true" package="ws.nv">
+        <property name="wsdl-NiceViewService" location="xml-resources/web-service-references/NiceViewService/wsdl/localhost_8080/NiceView/NiceViewService.wsdl"/>
+        <wsimport sourcedestdir="${build.generated.dir}/jax-wsCache/NiceViewService" destdir="${build.generated.dir}/jax-wsCache/NiceViewService" wsdl="${wsdl-NiceViewService}" catalog="catalog.xml" encoding="${source.encoding}" extension="true" verbose="true" fork="false" wsdlLocation="http://localhost:8080/NiceView/NiceViewService?wsdl" xnocompile="true" xendorsed="true" package="ws.nv">
             <depends file="${wsdl-NiceViewService}"/>
             <produces dir="${build.generated.dir}/jax-wsCache/NiceViewService"/>
         </wsimport>
@@ -33,5 +33,22 @@
         <delete dir="${build.generated.dir}/jax-wsCache/NiceViewService"/>
         <delete dir="${build.generated.sources.dir}/jax-ws/ws/nv"/>
     </target>
-    <target name="wsimport-client-generate" depends="wsimport-client-NiceViewService"/>
+    <target name="wsimport-client-lameduckService" depends="wsimport-init">
+        <mkdir dir="${build.generated.dir}/jax-wsCache/lameduckService"/>
+        <property name="wsdl-lameduckService" location="xml-resources/web-service-references/lameduckService/wsdl/localhost_8080/LameDuck/lameduckService.wsdl"/>
+        <wsimport sourcedestdir="${build.generated.dir}/jax-wsCache/lameduckService" destdir="${build.generated.dir}/jax-wsCache/lameduckService" wsdl="${wsdl-lameduckService}" catalog="catalog.xml" encoding="${source.encoding}" extension="true" verbose="true" fork="false" wsdlLocation="http://localhost:8080/LameDuck/lameduckService?wsdl" xnocompile="true" xendorsed="true" package="ws.ld">
+            <depends file="${wsdl-lameduckService}"/>
+            <produces dir="${build.generated.dir}/jax-wsCache/lameduckService"/>
+        </wsimport>
+        <copy todir="${build.generated.sources.dir}/jax-ws">
+            <fileset dir="${build.generated.dir}/jax-wsCache/lameduckService">
+                <include name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="wsimport-client-clean-lameduckService" depends="-init-project">
+        <delete dir="${build.generated.dir}/jax-wsCache/lameduckService"/>
+        <delete dir="${build.generated.sources.dir}/jax-ws/ws/ld"/>
+    </target>
+    <target name="wsimport-client-generate" depends="wsimport-client-NiceViewService, wsimport-client-lameduckService"/>
 </project>

@@ -1,0 +1,88 @@
+<?xml version='1.0' encoding='UTF-8'?><!-- Published by JAX-WS RI (http://jax-ws.java.net). RI's version is Metro/2.3.1-b419 (branches/2.3.1.x-7937; 2014-08-04T08:11:03+0000) JAXWS-RI/2.2.10-b140803.1500 JAXWS-API/2.2.11 JAXB-RI/2.2.10-b140802.1033 JAXB-API/2.2.12-b140109.1041 svn-revision#unknown. --><definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://niceview.ws" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns0="http://types.fastmoney.imm.dtu.dk" xmlns:ns1="http://niceviewtypes" name="NiceViewWSDL" targetNamespace="http://niceview.ws">
+    <types>
+                <xsd:schema>
+                                    <xsd:import namespace="http://niceviewtypes" schemaLocation="http://localhost:8080/NiceView/NiceViewService?xsd=1"/>
+                </xsd:schema>
+    </types>
+    <message name="getHotelsRequest">
+        <part name="input" element="ns1:getRequest"/>
+    </message>
+    <message name="getHotelsResponse">
+        <part name="output" element="ns1:getResponse"/>
+    </message>
+    <message name="bookHotelRequest">
+        <part name="input" element="ns1:bookRequest"/>
+    </message>
+    <message name="bookHotelResponse">
+        <part name="output" element="ns1:bookResponse"/>
+    </message>
+    <message name="bookFault">
+        <part name="fault" element="ns1:bookHotelFault"/>
+    </message>
+    <message name="cancelHotelRequest">
+        <part name="input" element="ns1:cancelRequest"/>
+    </message>
+    <message name="cancelHotelResponse">
+        <part name="output" element="ns1:cancelResponse"/>
+    </message>
+    <message name="cancelFault">
+        <part name="fault" element="ns1:cancelFault"/>
+    </message>
+    <portType name="NiceViewWSDLPortType">
+        <operation name="getHotels">
+            <input name="getInput" message="tns:getHotelsRequest"/>
+            <output name="getOutput" message="tns:getHotelsResponse"/>
+        </operation>
+        <operation name="bookHotel">
+            <input name="bookInput" message="tns:bookHotelRequest"/>
+            <output name="bookOutput" message="tns:bookHotelResponse"/>
+            <fault name="bookFault" message="tns:bookFault"/>
+        </operation>
+        <operation name="cancelHotel">
+            <input name="cancelInput" message="tns:cancelHotelRequest"/>
+            <output name="cancelOutput" message="tns:cancelHotelResponse"/>
+            <fault name="cancelFault" message="tns:cancelFault"/>
+        </operation>
+    </portType>
+    <binding name="NiceViewWSDLPortTypeBinding" type="tns:NiceViewWSDLPortType">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="getHotels">
+            <soap:operation/>
+            <input name="getInput">
+                <soap:body use="literal"/>
+            </input>
+            <output name="getOutput">
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+        <operation name="bookHotel">
+            <soap:operation/>
+            <input name="bookInput">
+                <soap:body use="literal"/>
+            </input>
+            <output name="bookOutput">
+                <soap:body use="literal"/>
+            </output>
+            <fault name="bookFault">
+                <soap:fault name="bookFault"/>
+            </fault>
+        </operation>
+        <operation name="cancelHotel">
+            <soap:operation/>
+            <input name="cancelInput">
+                <soap:body use="literal"/>
+            </input>
+            <output name="cancelOutput">
+                <soap:body use="literal"/>
+            </output>
+            <fault name="cancelFault">
+                <soap:fault name="cancelFault"/>
+            </fault>
+        </operation>
+    </binding>
+    <service name="NiceViewService">
+        <port name="NiceViewWSDLPortTypeBindingPort" binding="tns:NiceViewWSDLPortTypeBinding">
+            <soap:address location="http://localhost:8080/NiceView/NiceViewService"/>
+        </port>
+    </service>
+</definitions>
