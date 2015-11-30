@@ -18,6 +18,8 @@ import niceviewtypes.*;
 /**
  *
  * @author Nis
+ * @CoAuthor Mathias
+ * 
  */
 @WebService(serviceName = "NiceViewService", portName = "NiceViewWSDLPortTypeBindingPort", endpointInterface = "ws.niceview.NiceViewWSDLPortType", targetNamespace = "http://niceview.ws", wsdlLocation = "WEB-INF/wsdl/NiceView/NiceViewWSDL.wsdl")
 public class NiceView {
@@ -78,10 +80,12 @@ public class NiceView {
     public boolean bookHotel(BookRequest input) throws BookFault {
         
         boolean output = false;
+        boolean credit = false;
         int price = 0;
         
         for (HotelInfo info : staticHotelData) {
             if (info.getBookNum() == input.getBookNum()) {
+                credit = info.isCredit();
                 output = true;
                 price = info.getPrice();
             }
@@ -89,7 +93,9 @@ public class NiceView {
         
         if (output) {
             try {
-                validateCreditCard(13,input.getCreditCardInfo(),price);
+                if (credit) {
+                    validateCreditCard(13,input.getCreditCardInfo(),price);
+                }
                 
                 bookedHotels.add(input.getBookNum());
             } catch (CreditCardFaultMessage fault) {
