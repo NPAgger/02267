@@ -10,7 +10,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Nis
+ * @author Andri
  */
 @XmlRootElement()
 public class Link {

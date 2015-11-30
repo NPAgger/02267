@@ -9,9 +9,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.ws.rs.BadRequestException;
 import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
-import javax.ws.rs.NotAllowedException;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -26,11 +26,15 @@ import ws.nv.*;
 import ws.travelgood.data.CreditCardType;
 import ws.travelgood.data.Itiniery;
 import ws.travelgood.representation.*;
+import static ws.travelgood.resource.ItinieryResource.addBookLink;
+import static ws.travelgood.resource.ItinieryResource.addCancelLink;
+import static ws.travelgood.resource.ItinieryResource.addSelfLink;
+import static ws.travelgood.resource.ItinieryResource.addStatusLink;
 
 /**
  * REST Web Service
  *
- * @author Nis
+ * @author Mathias
  */
 @Path("niceview")
 public class NiceViewResource {
@@ -67,6 +71,7 @@ public class NiceViewResource {
         
         for (HotelInfo hi : result) {
             HotelInfoType hit = new HotelInfoType(hi);
+            hit.setStatus("unconfirmed");
             lastSearch.put(Integer.toString(hi.getBookNum()), hit);
             output.add(hit);
         }
@@ -75,13 +80,6 @@ public class NiceViewResource {
         
         return Response.ok(info).build();
     }
-    
-    @Path("check")
-    @GET
-    @Produces(ItinieryResource.MEDIATYPE_TRAVELGOOD)
-    public HotelInfoType mapCheck() {
-        return lastSearch.get("1");
-    } 
     
     @Path("addhotel/{iid}/{hid}")
     @PUT
@@ -100,10 +98,10 @@ public class NiceViewResource {
         } else if (!(itin.getStatus() == "running" || 
                 itin.getStatus() == "updated")) {
             Response r = Response.
-                    status(Response.Status.FORBIDDEN).
+                    status(Response.Status.BAD_REQUEST).
                     entity("Itiniery is not open").
                     build();
-            throw new NotAllowedException(r);
+            throw new BadRequestException(r);
         }
         
         HotelInfoType hotel = lastSearch.get(hid);
@@ -119,25 +117,34 @@ public class NiceViewResource {
         ItinieryResource.itins.put(iid, itin);
         
         status.setStatus(ItinieryResource.STATUS_UPDATED);
+        itin.setStatus(ItinieryResource.STATUS_UPDATED);
+        
+        addSelfLink(iid,status);
+        addStatusLink(iid,status);
+        addBookLink(iid,status);
+        addCancelLink(iid,status);
         
         return status;
     }
     
-    public static String bookList(List<HotelInfoType> input, CreditCardType cc) {
+    public static String bookList(String id, CreditCardType cc) {
         CreditCardInfoType credit = cc.toNVcc();
+        
+        Itiniery itin = ItinieryResource.itins.get(id);
         
         int counter;
         BookRequest request = new BookRequest();
         
-        for (counter = 0; counter < input.size(); counter++ ) {
-            request.setBookNum(input.get(counter).getHotel().getBookNum());
+        for (counter = 0; counter < itin.getHotels().size(); counter++ ) {
+            request.setBookNum(itin.getHotels().get(counter).getHotel().getBookNum());
             request.setCreditCardInfo(credit);
             try {
                 bookHotel(request);
+                itin.getHotels().get(counter).setStatus("confirmed");
             } catch (BookFault bf) {
                 CancelRequest cancel = new CancelRequest();
                 for (int i = 0; i <= counter; i++) {
-                    cancel.setBookNum(input.get(i).getHotel().getBookNum());
+                    cancel.setBookNum(itin.getHotels().get(i).getHotel().getBookNum());
                 }
                 return "booking "+counter+" failed";
             }
@@ -146,27 +153,32 @@ public class NiceViewResource {
         return "complete";
     }
     
-    public static String cancelList(List<HotelInfoType> input, CreditCardType cc) {
+    public static String cancelList(String id, CreditCardType cc) {
         CreditCardInfoType credit = cc.toNVcc();
+        
+        Itiniery itin = ItinieryResource.itins.get(id);
+        
+        String result = "complete";
         
         int counter;
         CancelRequest cancel = new CancelRequest();
         
-        for (counter = 0; counter < input.size(); counter++ ) {
-            cancel.setBookNum(input.get(counter).getHotel().getBookNum());
+        for (counter = 0; counter < itin.getHotels().size(); counter++ ) {
+            cancel.setBookNum(itin.getHotels().get(counter).getHotel().getBookNum());
             try {
                 cancelHotel(cancel);
+                itin.getHotels().get(counter).setStatus("cancelled");
             } catch (CancelFault_Exception cf) {
                 BookRequest request = new BookRequest();
                 for (int i = 0; i <= counter; i++) {
-                    request.setBookNum(input.get(counter).getHotel().getBookNum());
+                    request.setBookNum(itin.getHotels().get(counter).getHotel().getBookNum());
                     request.setCreditCardInfo(credit);
                 }
-                return "cancelling "+counter+" failed";
+                result = "fail";
             }
         }
 
-        return "complete";
+        return result;
     }
 
     private static GetResponse getHotels(ws.nv.GetRequest input) {

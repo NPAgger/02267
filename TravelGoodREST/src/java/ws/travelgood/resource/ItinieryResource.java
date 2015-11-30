@@ -17,6 +17,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import ws.travelgood.data.*;
 import ws.travelgood.representation.*;
@@ -33,14 +34,11 @@ public class ItinieryResource {
     static final String STATUS_UPDATED = "updated";
     static final String STATUS_BOOKED = "booked";
     static final String STATUS_CANCELLED = "cancelled";
-    static final String STATUS_PAYMENT_CONFIRMED = "payment confirmed";
     static final String RELATION_BASE = "http://travelgood.ws/relations/";
     static final String CANCEL_RELATION = RELATION_BASE + "cancel";
     static final String SELF_RELATION = RELATION_BASE + "self";
     static final String STATUS_RELATION = RELATION_BASE + "status";
-    static final String PAYMENT_RELATION = RELATION_BASE + "payment";
-    static final String BOOK_HOTEL_RELATION = RELATION_BASE + "book_hotel";
-    static final String BOOK_FLIGHT_RELATION = RELATION_BASE + "book_flight";
+    static final String BOOK_RELATION = RELATION_BASE + "book";
 
     static final String MEDIATYPE_TRAVELGOOD = "application/travelgood+xml";
     
@@ -73,6 +71,8 @@ public class ItinieryResource {
         
         addSelfLink(id,itinRep);
         addStatusLink(id,itinRep);
+        addBookLink(id,itinRep);
+        addCancelLink(id,itinRep);
         
         return itinRep;
     }
@@ -99,6 +99,7 @@ public class ItinieryResource {
         
         addSelfLink(id,itinRep);
         addStatusLink(id,itinRep);
+        addCancelLink(id,itinRep);
         
         return itinRep;
     }
@@ -117,8 +118,8 @@ public class ItinieryResource {
                     entity("Itiniery not found").
                     build();
             throw new NotFoundException(r);
-        } else if (!(itin.getStatus() == "running" || 
-                itin.getStatus() == "updated")) {
+        } else if (!(itin.getStatus().equals("running") || 
+                itin.getStatus().equals("updated"))) {
             Response r = Response.
                     status(Response.Status.FORBIDDEN).
                     entity("Itiniery is not open").
@@ -127,11 +128,11 @@ public class ItinieryResource {
         }
         StatusRepresentation itinRep = new StatusRepresentation();
         
-        String result = NiceViewResource.bookList(itin.getHotels(), cc);
+        String result = NiceViewResource.bookList(id, cc);
         
-        if (result == "complete") {
-            result = LameDuckResource.bookList(itin.getFlights(), cc);
-            if (result == "complete") {
+        if (result.equals("complete")) {
+            result = LameDuckResource.bookList(id, cc);
+            if (result.equals("complete")) {
                 itinRep.setStatus(STATUS_BOOKED);
                 addSelfLink(id,itinRep);
                 addStatusLink(id,itinRep);
@@ -154,6 +155,10 @@ public class ItinieryResource {
             throw new BadRequestException(r);
         }
         
+        addSelfLink(id,itinRep);
+        addStatusLink(id,itinRep);
+        addCancelLink(id,itinRep);
+        
         return itinRep;
     }
     
@@ -172,7 +177,7 @@ public class ItinieryResource {
                     build();
             throw new NotFoundException(r);
         }
-        if (itin.getStatus() == "cancelled") {
+        if (itin.getStatus().equals("cancelled")) {
             Response r = Response.
                     status(Response.Status.BAD_REQUEST).
                     entity("Itiniery already cancelled").
@@ -181,23 +186,25 @@ public class ItinieryResource {
         }
         
         StatusRepresentation rep = new StatusRepresentation();
-        if (itin.getStatus() == "running" || itin.getStatus() == "updated") {
+        if (itin.getStatus().equals("running") || itin.getStatus().equals("updated")) {
             itin = new Itiniery();
             itin.setFlights(new ArrayList());
             itin.setHotels(new ArrayList());
             itin.setStatus(STATUS_CANCELLED);
             
+            rep.setStatus(STATUS_CANCELLED);
+            
             itins.put(id, itin);
             
             itin.setStatus(STATUS_CANCELLED);
         }
-        else if(itin.getStatus() == "booked") {
-            String result = NiceViewResource.cancelList(itin.getHotels(), cc);
+        else if(itin.getStatus().equals("booked")) {
+            String result = NiceViewResource.cancelList(id, cc);
             
-            if (result == "complete") {
-                result = LameDuckResource.cancelList(itin.getFlights(), cc);
+            if (result.equals("complete")) {
+                result = LameDuckResource.cancelList(id, cc);
                 
-                if (result == "complete") {
+                if (result.equals("complete")) {
                     rep.setStatus(STATUS_CANCELLED);
                     addSelfLink(id,rep);
                     addStatusLink(id,rep);
@@ -221,6 +228,9 @@ public class ItinieryResource {
             }
         }
         
+        addSelfLink(id,rep);
+        addStatusLink(id,rep);
+        
         return rep;
     }
     
@@ -235,6 +245,20 @@ public class ItinieryResource {
         Link link = new Link();
         link.setUri(String.format("%s/itinieries/%s/status", BASE_URI, id));
         link.setRel(STATUS_RELATION);
+        response.getLinks().add(link);
+    }
+    
+    public static void addBookLink(String id, Representation response) {
+        Link link = new Link();
+        link.setUri(String.format("%s/%s/%s/%s", BASE_URI, "travelgood",id,"book"));
+        link.setRel(BOOK_RELATION);
+        response.getLinks().add(link);
+    }
+    
+    public static void addCancelLink(String id, Representation response) {
+        Link link = new Link();
+        link.setUri(String.format("%s/%s/%s/%s", BASE_URI, "travelgood",id,"cancel"));
+        link.setRel(CANCEL_RELATION);
         response.getLinks().add(link);
     }
 }

@@ -9,9 +9,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.ws.rs.BadRequestException;
 import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
-import javax.ws.rs.NotAllowedException;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -26,10 +26,14 @@ import ws.travelgood.data.FlightInfoList;
 import ws.travelgood.data.FlightInfoType;
 import ws.travelgood.data.Itiniery;
 import ws.travelgood.representation.StatusRepresentation;
+import static ws.travelgood.resource.ItinieryResource.addBookLink;
+import static ws.travelgood.resource.ItinieryResource.addCancelLink;
+import static ws.travelgood.resource.ItinieryResource.addSelfLink;
+import static ws.travelgood.resource.ItinieryResource.addStatusLink;
 /**
  * REST Web Service
  *
- * @author Nis
+ * @author Andri
  */
 @Path("lameduck")
 public class LameDuckResource {
@@ -64,6 +68,7 @@ public class LameDuckResource {
         
         for (FlightInfo fi : result) {
             FlightInfoType fit = new FlightInfoType(fi);
+            fit.setStatus("unconfirmed");
             lastSearch.put(Integer.toString(fi.getBookingNumber()), fit);
             output.add(fit);
         }
@@ -90,10 +95,10 @@ public class LameDuckResource {
         } else if (!(itin.getStatus() == "running" || 
                 itin.getStatus() == "updated")) {
             Response r = Response.
-                    status(Response.Status.FORBIDDEN).
+                    status(Response.Status.BAD_REQUEST).
                     entity("Itiniery is not open").
                     build();
-            throw new NotAllowedException(r);
+            throw new BadRequestException(r);
         }
         
         FlightInfoType flight = lastSearch.get(fid);
@@ -109,27 +114,38 @@ public class LameDuckResource {
         ItinieryResource.itins.put(iid, itin);
         
         status.setStatus(ItinieryResource.STATUS_UPDATED);
+        itin.setStatus(ItinieryResource.STATUS_UPDATED);
+        
+        addSelfLink(iid,status);
+        addStatusLink(iid,status);
+        addBookLink(iid,status);
+        addCancelLink(iid,status);
         
         return status;
     }
     
-    public static String bookList(List<FlightInfoType> input, CreditCardType cc) {
+    public static String bookList(String id, CreditCardType cc) {
         CreditCardInfoType credit = cc.toLDcc();
+        
+        Itiniery itin = ItinieryResource.itins.get(id);
         
         int counter;
         RequestbookFlight request = new RequestbookFlight();
         
-        for (counter = 0; counter < input.size(); counter++ ) {
-            request.setBookingNumber(input.get(0).getFlight().getBookingNumber());
+        for (counter = 0; counter < itin.getFlights().size(); counter++ ) {
+            request.setBookingNumber(itin.getFlights().get(counter).getFlight()
+                    .getBookingNumber());
             request.setCreditCardInfo(credit);
             try {
                 bookFlight(request);
+                itin.getFlights().get(counter).setStatus("confirmed");
             } catch (BookFlightFault_Exception bf) {
                 RequestcancelFlight cancel = new RequestcancelFlight();
                 for (int i = 0; i <= counter; i++) {
-                    cancel.setBookingNumber(input.get(0).getFlight().getBookingNumber());
+                    cancel.setBookingNumber(itin.getFlights().get(i).getFlight()
+                            .getBookingNumber());
                     cancel.setCreditCardInfo(credit);
-                    cancel.setPrice(input.get(0).getFlight().getPrice());
+                    cancel.setPrice(itin.getFlights().get(i).getFlight().getPrice());
                 }
                 return "booking "+counter+" failed";
             }
@@ -138,32 +154,36 @@ public class LameDuckResource {
         return "complete";
     }
     
-    public static String cancelList(List<FlightInfoType> input, CreditCardType cc) {
+    public static String cancelList(String id, CreditCardType cc) {
         CreditCardInfoType credit = cc.toLDcc();
+        
+        Itiniery itin = ItinieryResource.itins.get(id);
+        
+        String result = "complete";
         
         int counter;
         RequestcancelFlight cancel = new RequestcancelFlight();
-        cancel.setBookingNumber(input.get(0).getFlight().getBookingNumber());
-                    cancel.setCreditCardInfo(credit);
-                    cancel.setPrice(input.get(0).getFlight().getPrice());
         
-        for (counter = 0; counter < input.size(); counter++ ) {
-            cancel.setBookingNumber(input.get(0).getFlight().getBookingNumber());
+        for (counter = 0; counter < itin.getFlights().size(); counter++ ) {
+            cancel.setBookingNumber(itin.getFlights().get(counter).getFlight()
+                    .getBookingNumber());
             cancel.setCreditCardInfo(credit);
-            cancel.setPrice(input.get(0).getFlight().getPrice());
+            cancel.setPrice(itin.getFlights().get(counter).getFlight().getPrice());
             try {
                 cancelFlight(cancel);
+                itin.getFlights().get(counter).setStatus("cancelled");
             } catch (CancelFlightFault_Exception cf) {
                 RequestbookFlight request = new RequestbookFlight();
                 for (int i = 0; i <= counter; i++) {
-                    request.setBookingNumber(input.get(0).getFlight().getBookingNumber());
+                    request.setBookingNumber(itin.getFlights().get(i).getFlight()
+                            .getBookingNumber());
                     request.setCreditCardInfo(credit);
                 }
-                return "cancelling "+counter+" failed";
+                result = "fail";
             }
         }
 
-        return "complete";
+        return result;
     }
 
     private static ListOfFlights getFlights(ws.ld.Request input) {
